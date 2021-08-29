@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "npm run start": "nodemon server.js --ignore public"
+    "start": "nodemon server.js --ignore public"
   },
   "author": "Gabriel Henrique da Silva",
   "license": "MIT",
