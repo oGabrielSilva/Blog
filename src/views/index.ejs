@@ -1,0 +1,80 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<%- include('includes/message') %>
+	<section class="p-3 mx-auto" role="main" id="home-section">
+		<main>
+			<%- include('includes/components/article-header') %>
+		</main>
+	</section>
+
+	<section class="p-3 mx-auto container">
+		<div class="row">
+			<article class="col-sm-8">
+				<section class="pb-3">
+					<div class="bg-light p-5 rounded">
+						<h1>Infinitychat</h1>
+						<p class="lead">Conheça o Infinity Mensageiro e tenha mais uma forma de trocar mensagens.</p>
+						<a class="btn btn-lg btn-primary" target="_blank" href="https://infinitychat.xyz" role="button">Acesse &raquo;</a>
+					</div>
+				</section>
+				<section class="pb-3">	
+					<div class="card">
+						<div class="card-header">
+							<span class="lead">Quote</span>
+						</div>
+						<div class="card-body">
+							<blockquote class="blockquote mb-0">
+								<p>Eu não sou aventureiro por escolha, mas pelo destino.</p>
+								<footer class="blockquote-footer"><span><cite title="Vincent van Gogh">Vincent van Gogh</cite></span></footer>
+							</blockquote>
+						</div>
+					</div>
+				</section>
+			</article>
+			<aside class="col-sm-4 p-3 rounded">
+				<section class="mt-3">
+					<div class="list-group">
+						<a href="#" class="list-group-item list-group-item-action">A second link item</a>
+						<a href="#" class="list-group-item list-group-item-action">A third link item</a>
+						<a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+					</div>
+				</section>
+				
+				<section class="pt-3">
+					<div class="card mb-3">
+						<div class="card-header">
+							Featured
+						</div>
+						<div class="card-body">
+							<h5 class="card-title">Special title treatment</h5>
+							<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+							<a href="#" class="btn btn-primary">Go somewhere</a>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header">
+							Featured
+						</div>
+						<div class="card-body">
+							<h5 class="card-title">Special title treatment</h5>
+							<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+							<a href="#" class="btn btn-primary">Go somewhere</a>
+						</div>
+					</div>
+				</section>
+
+				<section class="mt-3 pb-1">
+					<form class="d-flex">
+						<div class="input-group flex-nowrap">
+							<span class="input-group-text" id="addon-wrapping">E-mail</span>
+							<input type="email" class="form-control" aria-label="E-mail" id="email" aria-describedby="addon-wrapping" placeholder="Cadastre seu E-mail">
+						</div>
+					</form>
+				</section>
+			</aside>
+		</div>		
+	</section>
+	<%- include('includes/footer') %>
+</body>
+</html>

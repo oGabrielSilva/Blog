@@ -1,0 +1,23 @@
+* {
+
+}
+
+.footer {
+	min-height: 30vh;
+}
+
+.footer * {
+	color: #fff;
+}
+
+.header-card {
+	height: 290px;
+}
+
+.first-card {
+	height: 596px;
+}
+
+#home-section {
+	max-width: 1440px;
+}
