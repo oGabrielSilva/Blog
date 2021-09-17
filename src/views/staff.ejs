@@ -1,0 +1,33 @@
+<%- include('includes/head') %>
+<body class="bg-light">
+	<%- include('includes/header') %>
+	<%- include('includes/message') %>
+	<div class="text-center mb-5">
+		<main class="form-signin h-100">
+			<p class="h2 mt-5">Bem-vindo de volta</p>
+			<form method="POST" action="/staff/login" class="mx-auto" id="admin-access">
+				<img src="favicon/icon.svg" height="62" draggable="false" class="rounded m-3">
+				<h1 class="h3 mb-3 fw-normal">Por favor, entre no sistema</h1>
+				<div class="form-floating mb-2 w-50 mx-auto">
+					<input type="text" class="form-control" required maxlength="50" 
+					id="system-user-name" name="name" placeholder="Nome completo">
+					<label for="system-user-name">Nome completo</label>
+				</div>
+				<div class="form-floating mb-2 w-50 mx-auto">
+					<input type="email" class="form-control" required maxlength="50" 
+					id="system-user-email" name="email" placeholder="Endereço de E-mail">
+					<label for="system-user-email">Endereço de E-mail</label>
+				</div>
+				<div class="form-floating mb-2 w-50 mx-auto">
+					<input type="password" class="form-control" required
+					id="system-user-password" name="password" placeholder="Senha">
+					<label for="system-user-password">Senha</label>
+				</div>
+				<button type="submit" class="w-50 mt-4 mb-5 btn btn-lg btn-primary">Enviar</button>
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+			</form>
+		</main>
+	</div>
+	<%- include('includes/footer') %>
+</body>
+</html>

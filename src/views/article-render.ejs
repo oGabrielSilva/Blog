@@ -1,0 +1,110 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<section class="container bg-light rounded">
+		<main>
+			<form method="POST" action="/system.article" class="p-3 pt-5 pb-5 mt-5 mb-5" id="render-article">
+				<div class="row">
+					<div class="form-group col-md-7">
+						<label class="mt-4 mb-1" for="title-page">Nome da página</label>
+						<input autocomplete="off" type="text" required maxlength="70" class="form-control" name="page" 
+						id="title-page" aria-describedby="Título da página" placeholder="Infinity - Como criar salas no Infinitychat">
+
+						<small id="title-help" class="form-text text-muted">
+							Mantenha o padrão: todos os títulos devem começar com "Infinity"
+						</small>
+					</div>
+					<div class="form-group col-md-5">
+						<label class="mt-4 mb-1" for="author">Criado por</label>
+						<input autocomplete="off" aria-describedby="Criado por" required name="author" type="text" class="form-control" id="author" value="<%= user.name %>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="mt-4 mb-1" for="title">Título do artigo</label>
+					<input autocomplete="off" aria-describedby="Título do artigo" required name="title" type="text" class="form-control" id="title" placeholder="Veja como criar uma sala no Infinitychat" maxlength="70">
+				</div>
+				<div class="form-group">
+					<label class="mt-4 mb-1" for="primary">Link da imagem principal</label>
+					<input autocomplete="off" aria-describedby="Link para a imagem principal" required name="primary" type="text" class="form-control" id="primary" placeholder="https://infinity/posts/img-scroll" maxlength="100">
+					<small id="primary-help" class="form-text text-muted">
+						As imagens devem ser adicionadas aos artigos através de um link. O usuário deve possuir um repositório fixo para elas.
+					</small>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-8">
+						<label class="mt-4 mb-1" for="description">Descrição do artigo</label>
+						<input autocomplete="off" aria-describedby="Descrição do artigo" required name="description" type="text" class="form-control" id="description" maxlength="70">
+					</div>
+					<div class="form-group col-md-4">
+						<label class="mt-4 mb-1" for="markdown">Markdown</label>
+						<select aria-describedby="Remarcadores" name="markdown" class="form-control form-select" id="markdown">
+							<option value="Programação">Programação</option>
+							<option value="Artigo Infinity">Artigo Infinity</option>
+							<option value="Comentário">Comentários</option>
+							<option value="Mundo Geek">Mundo Geek</option>
+							<option selected></option>
+						</select>
+						<small id="markdown-help" class="form-text text-muted">
+							Selecione o assunto principal do seu artigo
+						</small>
+					</div>
+				</div>
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+				<div class="card mt-4">
+					<div class="card-header">
+						<ul class="nav nav-pills card-header-pills">
+							<li class="nav-item">
+								<a role="button" class="nav-link active" id="add">Validar</a>
+							</li>
+							<li class="nav-item">
+								<a role="button" class="nav-link" id="plus">Novo parágrafo</a>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body" id="contents">
+						<small id="danger-help" class="form-text text-danger"></small>
+						<!-- Parágrafo 1 -->
+						<div class="form-group">
+							<input autocomplete="off" aria-describedby="Título do Parágrafo 1" required name="h1" type="text" class="form-control mb-2" placeholder="Introdução - Subtítulo" maxlength="70">
+						</div>
+						<div class="form-floating">
+							<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="introduction" name="introduction"></textarea>
+							<label for="introduction">Introdução</label>
+						</div>
+						<!-- Parágrafo 2 -->
+						<div id="paragraph">
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h2" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img" maxlength="100">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development" name="development"></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+						</div>
+						<!-- Parágrafo 3 -->
+						<div class="form-group">
+							<input autocomplete="off" aria-describedby="Título do artigo" name="h3" type="text" class="form-control mt-5 mb-2" placeholder="Conclusão - Subtítulo" maxlength="70">
+						</div>
+						<div class="form-floating">
+							<textarea minlength="100" style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="ending" name="ending"></textarea>
+							<label for="ending">Encerramento</label>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn mt-5 btn-primary">Submit</button>
+			</form>
+		</main>
+	</section>
+
+	<%- include('includes/footer') %>
+</body>
+</html>

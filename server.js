@@ -6,6 +6,10 @@ const csrf = require('csurf');
 const port = process.env.PORT || 3000;
 const app = express();
 const mongoose = require('mongoose');
+const server = require('http').createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+const Article = require('./src/models/Article');
 
 mongoose.connect(process.env.CONNECTSTRING, { 
     useNewUrlParser: true,
@@ -21,7 +25,16 @@ const routes = require('./src/routes/');
 
 const { middlewareGlobal, checkCsrfError, csrfMiddleware } = require('./src/middleware/');
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "i.pinimg.com/"],
+      },
+    },
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, 'public/')));
@@ -47,6 +60,10 @@ app.use(csrfMiddleware);
 app.use(checkCsrfError);
 app.use(routes);
 
+io.on('connection', socket => {
+  socket.on('req-articles', () => Article.Search().then(e => socket.emit('re-articles', e)));
+});
+
 app.on('connect', () => {
-    app.listen(port, () => console.log(`\nServer on port ${port}. http://127.0.0.1:${port}\n`));
+    server.listen(port, () => console.log(`\nServer on port ${port}. http://127.0.0.1:${port}\n`));
 });

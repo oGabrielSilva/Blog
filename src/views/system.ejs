@@ -1,0 +1,30 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<%- include('includes/message') %>
+
+	<section class="container mt-5">
+		<main>
+			<div>
+				<p class="h2 text-center">Bem-vindo de volta!</p>
+				<p class="text-center h3"><span><%= user.name %></span></p>
+			</div>
+
+			<section>
+				<div>
+					<article class="text-center mt-5">
+						<a target="_blank" href="/system.article" class="btn btn-primary">Iniciar Artigo</a>
+						<a target="_blank" href="/system.edition" class="btn btn-primary">Editar Artigo</a>
+						<a target="_blank" href="/system.del" class="btn btn-danger">Apagar Artigo</a>
+						<a target="_blank" href="/system.draft" class="btn btn-danger">Rascunhos</a>
+					</article>
+				</div>
+			</section>
+
+			<%- include('includes/components/form-new-adm') %>
+		</main>
+	</section>
+
+	<%- include('includes/footer') %>
+</body>
+</html>

@@ -1,11 +1,12 @@
 {
   "name": "projeto_blog",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js --ignore public"
+    "dev": "nodemon server.js --ignore public --ignore frontend",
+    "compile": "webpack"
   },
   "author": "Gabriel Henrique da Silva",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "express-session": "^1.17.2",
     "helmet": "^4.6.0",
     "mongoose": "^5.12.13",
+    "socket.io": "^4.2.0",
     "style-loader": "^2.0.0",
     "validator": "^13.6.0"
   },

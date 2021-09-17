@@ -1,7 +1,8 @@
 exports.checkCsrfError = (err, req, res, next) => {
     if(err) {
         console.log('erro no csrf');
-        return res.render('404');
+        req.flash('errors', ['Infelizmente tivemos algum problema... :(']);
+        return res.redirect('/');
     };
     next();
 };
@@ -14,5 +15,15 @@ exports.csrfMiddleware = (req, res, next) => {
 exports.middlewareGlobal = (req, res, next) => {
     res.locals.errors = req.flash('errors');
     res.locals.success = req.flash('success');
+    res.locals.user = req.session.user;
     next();
 };
+
+exports.loginRequired = (req, res, next) => {
+    if(!req.session.user) {
+        req.session.save(() => res.redirect('/'));
+        return;
+    }
+    next();
+}
+
