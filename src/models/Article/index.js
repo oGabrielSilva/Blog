@@ -38,7 +38,7 @@ module.exports = class Article {
         this.body = body;
         this.errors = [];
         this.article = null;
-	}
+    }
 
     async create() {
         this.valid();
@@ -48,7 +48,7 @@ module.exports = class Article {
     }
 
     static async Search(limit = 7) {
-        const articles = await PostModel.find().limit(limit);
+        const articles = await PostModel.find().sort({ '_id': -1 }).limit(limit); //Funciona, não mexer...
         if(!articles) return null;
         return articles;
     }

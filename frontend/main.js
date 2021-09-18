@@ -20,4 +20,4 @@ if(homeHeader) {
 };
 
 if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
-else if(form.getAttribute('id') === 'render-article') funRenderArticle();
+else if(form && form.getAttribute('id') === 'render-article') funRenderArticle();

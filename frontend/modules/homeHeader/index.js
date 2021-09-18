@@ -4,8 +4,8 @@ export function funHomeHeader(elms, homeHeader) {
 	const lastPost = [];
 
 	elms.forEach(elm => {
-		if(lastPost.length < 1) return lastPost.push(elm);
-		if(elm.createdAt < lastPost[0]) return lastPost[0] = elm;
+		if(lastPost.length < 1) lastPost.push(elm);
+		if(elm._id > lastPost[0]._id) lastPost[0] = elm;
 	});
 	
 	const sync = setLastPost(row, lastPost);
@@ -16,9 +16,15 @@ export function funHomeHeader(elms, homeHeader) {
 		let index = 0;
 		childrens.forEach(elm => {
 			if(index >= elms.length) index = 0;
+			if(elms[index] === lastPost[0]) index += 1;
 			elm.querySelector('.card-title').innerText = elms[index].title;
 			elm.querySelector('.card-text').innerText = elms[index].description;
-			elm.querySelector('a').setAttribute('href', `/post/${elms[index]._id}`);
+			elm.querySelector('a').setAttribute('href', `/${elms[index]._id}`);
+			if(elm.querySelector('small')) {
+				const date = new Date(elms[index].createdAt);
+				elm.querySelector('small').
+					innerText = moment(date, 'YYYYMMDD').fromNow();
+			}
 			index += 1;
 		});
 	};

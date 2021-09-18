@@ -1,0 +1,32 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<section class="container">
+		<h1 id="title" class="display-3 text-center pt-5 m-5 text-break">
+			<% if(locals.id) { %>
+			<%= locals.id %>
+			<% } %>
+		</h1>
+		<p>
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		</p>
+	</section>
+	<section class="container">
+		<img src="favicon/icon.svg" class="mx-auto d-block m-5" id="primary">
+	</section>
+	<div class="container mx-auto row">
+		<section class="col-sm-8">
+			<main>
+				
+			</main>
+		</section>
+		<section class="col-sm-4">
+			<aside class="p-3">
+				<%- include('includes/components/article-aside') %>
+			</div>
+		</section>
+	</div>
+
+	<%- include('includes/footer') %>
+</body>
+</html>

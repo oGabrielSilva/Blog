@@ -13,6 +13,7 @@ footer .card #row {
 
 .header-card {
 	height: 290px;
+	overflow: auto;
 }
 
 .first-card {
@@ -21,4 +22,9 @@ footer .card #row {
 
 #home-section {
 	max-width: 1440px;
+}
+
+p.card-text {
+	overflow: auto;
+	max-height: 100px;
 }
