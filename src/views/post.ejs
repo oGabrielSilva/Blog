@@ -2,31 +2,46 @@
 <body>
 	<%- include('includes/header') %>
 	<section class="container">
-		<h1 id="title" class="display-3 text-center pt-5 m-5 text-break">
-			<% if(locals.id) { %>
-			<%= locals.id %>
-			<% } %>
-		</h1>
-		<p>
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		<h1 id="title" class="display-3 text-center pt-5 m-5 text-break"><%= locals.article.title %></h1>
+		<p id="description">
+			<%= locals.article.description %>
 		</p>
+		<p class="text-end pe-none">Escrito por: <span id="author" class="text-decoration-underline fw-light"><%= locals.article.author %></span></p>
+		<p class="text-end pe-none">&raquo; <span id="markdown" class="fw-light text-decoration-underline">
+			<%= locals.article.markdown %>
+		</span></p>
 	</section>
-	<section class="container">
-		<img src="favicon/icon.svg" class="mx-auto d-block m-5" id="primary">
-	</section>
-	<div class="container mx-auto row">
-		<section class="col-sm-8">
-			<main>
-				
-			</main>
-		</section>
-		<section class="col-sm-4">
-			<aside class="p-3">
-				<%- include('includes/components/article-aside') %>
-			</div>
-		</section>
+	<div class="container">
+		<div class="row">
+			<section class="col-sm-8">
+				<main>
+					<section>
+						<img src="<%= locals.article.primary %>" class="mx-auto w-75 d-block mb-5 mt-4" id="primary">
+					</section>
+					<section>
+						<p id="h1" class="h2 mb-4"><%= locals.article.h1 %></p>
+						<p id="introduction"><%= locals.article.introduction %></p>
+					</section>
+					<section>
+						<img src="<%= locals.article.img %>" class="mx-auto w-75 d-block mb-5 mt-5" id="img">
+						<p id="h2" class="h2 mb-4"><%= locals.article.h2 %></p>
+						<p id="development"><%= locals.article.development %></p>
+					</section>
+					<section>
+						<div class="border-top border-bottom border-3 text-center">
+							<button class="m-3 btn btn-light">Clique para ler mais <span><img src="/favicon/selection.svg" style="height: 15px;"></span></button>
+						</div>
+					</section>
+				</main>
+			</section>
+			<section class="col-sm-4">
+				<aside class="p-3">
+					<%- include('includes/components/article-aside') %>
+				</div>
+			</section>
+		</div>
 	</div>
-
+	<input type="hidden" id="_id" value="<%= locals.article._id %>">
 	<%- include('includes/footer') %>
 </body>
 </html>

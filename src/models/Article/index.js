@@ -58,6 +58,15 @@ module.exports = class Article {
         if(this.article) this.errors.push('Artigo de mesmo título já existe');
     }
 
+    static async SearchArticleById(id) {
+        try {
+            const article = await PostModel.findById(id);
+            return article;
+        } catch(e) {
+            return null;
+        }
+    }
+
     valid() {
         for(let key in this.body) {
             if(typeof this.body[key] !== 'string') {
