@@ -39,6 +39,6 @@ function setLastPost(row, lastPost) {
 	row.children[0].querySelector('img').setAttribute('src', lastPost[0].primary)
 	row.children[0].querySelector('.card-title').innerText = lastPost[0].title;
 	row.children[0].querySelector('.card-text').innerText = lastPost[0].description;
-	row.children[0].querySelector('a').setAttribute('href', `/post/${lastPost[0]._id}`);
+	row.children[0].querySelector('a').setAttribute('href', `/${lastPost[0]._id}`);
 	return true;
 };
