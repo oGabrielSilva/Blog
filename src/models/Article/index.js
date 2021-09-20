@@ -63,6 +63,7 @@ module.exports = class Article {
             const article = await PostModel.findById(id);
             return article;
         } catch(e) {
+            console.log(e);
             return null;
         }
     }

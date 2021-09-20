@@ -69,6 +69,7 @@ export default function funRenderArticle() {
 	main.querySelector('#add').addEventListener('click', valid);
 	main.querySelector('#plus').addEventListener('click', e => {
 		e.preventDefault();
+		if(index === 5) return main.querySelector('#plus').setAttribute('class', 'nav-link disabled');
 		index += 1;
 		const container = main.querySelector('#paragraph');
 		const headers = document.createElement('div');
