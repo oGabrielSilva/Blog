@@ -7,6 +7,8 @@ exports.system = (req, res) => {
     return res.render('system');
 }
 
+exports.edition = (req, res) => res.render('staff');
+
 exports.login = async (req, res) => {
 	try {
         const login = new Login(req.body);
@@ -42,7 +44,6 @@ exports.signUp = async (req, res) => {
             })
             return;
         }
-
         req.flash('success', 'Sua conta foi criada com sucesso.');
         req.session.save(function() {
             return res.redirect('/staff');
@@ -57,5 +58,5 @@ exports.signUp = async (req, res) => {
 
 exports.out = (req, res) => {
     req.session.destroy();
-    return res.redirect('/staff');
+    return res.redirect('/');
 }

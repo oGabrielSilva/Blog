@@ -1,5 +1,5 @@
 export function funHomeHeader(elms, homeHeader) {
-	const row = document.querySelector('.row');
+	const row = document.querySelector('#row');
 	const featured = document.querySelector('#featured');
 	const lastPost = [];
 
@@ -29,11 +29,6 @@ export function funHomeHeader(elms, homeHeader) {
 		});
 	};
 };
-
-export function funSetFeatured(elms) {
-	const featured = document.querySelector('#featured');
-	if(!featured) return false;
-}
 
 function setLastPost(row, lastPost) {
 	row.children[0].querySelector('img').setAttribute('src', lastPost[0].primary)

@@ -58,9 +58,9 @@ const fun = e => {
 		const inputs = main.querySelector('#contents').querySelectorAll('input');
 		const article = new Article([...inputs].concat([...texts]));
 		article.replacing();
-		setTimeout(() => console.log('Oi'), 6000);
 		return e.target.submit();
-	} 
+	};
+	 
 	main.querySelector('button').classList.add('bg-danger')
 	setTimeout(() => main.querySelector('button').classList.remove('bg-danger'), 5000);
 }

@@ -4,7 +4,7 @@ exports.index = async (req, res) => {
 	try {
 		const article = await Article.SearchArticleById(req.params.id);
 		if(!article) {
-			req.flash('errors', ['Ops, tivemos algum erro. Sentimos muito :c']);
+			req.flash('errors', ['Aconteceu algo de errado? Nos contate. :3']);
 			req.session.save(function() {
 				return res.render('index');
 			});

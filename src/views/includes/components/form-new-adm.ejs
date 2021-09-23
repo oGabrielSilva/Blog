@@ -1,43 +1,52 @@
 <div class="text-center mb-5">
 	<p class="h2 mt-5">Cadastre novos usuários</p>
-	<form method="POST" action="/staff/new/user" class="mx-auto">
+	<form method="POST" action="/staff-new-user" class="mx-auto row">
 		<h1 class="h3 mb-3 fw-normal">Cuidado com os dados</h1>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="text" required class="form-control" maxlength="50" 
-			id="system-new-user-name" name="name" placeholder="Nome completo">
-			<label for="system-user-name">Nome completo</label>
+		<div class="col-sm-6">
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" required class="form-control" maxlength="50" 
+				id="system-new-user-name" name="name" placeholder="Nome completo">
+				<label for="system-user-name">Nome completo</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="email" class="form-control" required maxlength="50" 
+				id="system-new-user-email" name="email" placeholder="Endereço de E-mail">
+				<label for="system-user-email">Endereço de E-mail</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" class="form-control" required maxlength="30"  
+				id="system-new-user-address" name="address" placeholder="Endereço">
+				<label for="system-user-name">Endereço</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" class="form-control" required maxlength="25"
+				id="system-new-user-city" name="city" placeholder="Cidade">
+				<label for="system-new-user-city">Cidade</label>
+			</div>
 		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="email" class="form-control" required maxlength="50" 
-			id="system-new-user-email" name="email" placeholder="Endereço de E-mail">
-			<label for="system-user-email">Endereço de E-mail</label>
-		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="text" class="form-control" required maxlength="30"  
-			id="system-new-user-address" name="address" placeholder="Endereço">
-			<label for="system-user-name">Endereço</label>
-		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="text" class="form-control" maxlength="20"
-			id="system-new-user-address-2" name="address-2" placeholder="Endereço 2">
-			<label for="system-new-user-address-2">Apart., studio, floor</label>
-		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="text" class="form-control" required maxlength="25"
-			id="system-new-user-city" name="city" placeholder="Cidade">
-			<label for="system-new-user-city">Cidade</label>
-		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="text" class="form-control" required maxlength="8"  
-			id="system-new-user-zip" name="zip" placeholder="Zip">
-			<label for="system-new-user-zip">Zip</label>
-		</div>
-		<div class="form-floating mb-2 w-75 mx-auto">
-			<input type="password" class="form-control" required 
-			id="system-new-user-password" name="password" placeholder="Senha">
-			<label for="system-user-password">Senha</label>
+		<div class="col-sm-6">
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" class="form-control" required  
+				id="system-new-user-img" name="img" placeholder="Perfil">
+				<label for="system-new-user-img">Link da imagem de perfil</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" class="form-control" required  
+				id="system-new-user-twitter" name="twitter" placeholder="Twitter">
+				<label for="system-new-user-twitter">Twitter</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="text" class="form-control" required  
+				id="system-new-user-github" name="github" placeholder="GitHub">
+				<label for="system-new-user-github">GitHub</label>
+			</div>
+			<div class="form-floating mb-2 mx-auto">
+				<input type="password" class="form-control" required 
+				id="system-new-user-password" name="password" placeholder="Senha">
+				<label for="system-new-user-password">Senha</label>
+			</div>
 		</div>
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-		<button type="submit" class="w-75 mt-4 mb-5 btn btn-lg btn-primary">Enviar</button>
+		<button type="submit" class="mx-auto mt-4 mb-5 btn btn-lg btn-primary">Enviar</button>
 	</form>
 </div>

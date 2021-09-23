@@ -21,6 +21,7 @@ exports.middlewareGlobal = (req, res, next) => {
 
 exports.loginRequired = (req, res, next) => {
     if(!req.session.user) {
+        console.log('Login Required');
         req.session.save(() => res.redirect('/'));
         return;
     }

@@ -4,6 +4,11 @@ const bcryptjs = require('bcryptjs');
 const LoginSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    img: { type: String, required: true },
+    twitter: { type: String, required: true },
+    github: { type: String, required: true },
     password: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
 });
@@ -36,7 +41,6 @@ module.exports = class Login {
         if(this.errors.length > 0) return;
         const salt = bcryptjs.genSaltSync();
         this.body.password = bcryptjs.hashSync(this.body.password, salt);
-        
         this.user = await LoginModel.create(this.body);
     }
 
@@ -59,13 +63,18 @@ module.exports = class Login {
         for(let key in this.body) {
             if(typeof this.body[key] !== 'string') {
                 this.body[key] = '';
-            }
-        }
+            };
+        };
 
         this.body = {
+            name: this.body.name,
             email: this.body.email,
-            password: this.body.password,
-            name: this.body.name
+            address: this.body.address,
+            city: this.body.city,
+            img: this.body.img,
+            twitter: this.body.twitter,
+            github: this.body.github,
+            password: this.body.password
         };
-    }
+    };
 };

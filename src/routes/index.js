@@ -12,9 +12,10 @@ route.get('/', home.index);		//rota da home
 //Rotas da administração
 route.get('/staff', staff.index);
 route.post('/staff/login', staff.login);
-route.get('/system', loginRequired, staff.system);
-route.post('/staff/new/user', loginRequired, staff.signUp);
+route.post('/staff-new-user', loginRequired, staff.signUp);
 route.get('/staff/out', staff.out);
+route.get('/system', loginRequired, staff.system);
+route.post('/system.edition/:id', loginRequired, staff.edition);
 
 //Rotas da administração de artigos 
 route.get('/system.article', loginRequired, article.index);
