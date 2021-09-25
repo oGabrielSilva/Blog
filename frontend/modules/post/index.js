@@ -43,7 +43,7 @@ function setReadMore(obj, pathname) {
 }
 
 export default function funReadMore(socket) {
-	const pathname = window.location.pathname.split('/')[1];
+	const pathname = window.location.pathname.split('=')[1];
 	socket.emit('search', pathname);
 	socket.on('re-article-by-id', obj => setReadMore(obj, pathname));
 };

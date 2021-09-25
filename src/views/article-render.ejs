@@ -3,6 +3,7 @@
 	<%- include('includes/header') %>
 	<section class="container bg-light rounded">
 		<main>
+			<% if(!locals.article) { %>
 			<form method="POST" action="/system.article" class="p-3 pt-5 pb-5 mt-5 mb-5" id="render-article">
 				<div class="row">
 					<div class="form-group col-md-7">
@@ -100,8 +101,200 @@
 						</div>
 					</div>
 				</div>
-				<button type="submit" class="btn mt-5 btn-primary">Submit</button>
+				<button type="submit" class="btn mt-5 btn-primary">Enviar Post</button>
 			</form>
+			<% } else { %>
+			<form method="POST" action="/system.article.edition" class="p-3 pt-5 pb-5 mt-5 mb-5" id="render-article">
+				<div class="row">
+					<div class="form-group col-md-7">
+						<label class="mt-4 mb-1" for="title-page">Nome da página</label>
+						<input autocomplete="off" type="text" required maxlength="70" class="form-control" name="page" 
+						id="title-page" aria-describedby="Título da página" placeholder="Infinity - Como criar salas no Infinitychat" value="<%= article.page %>">
+
+						<small id="title-help" class="form-text text-muted">
+							Mantenha o padrão: todos os títulos devem começar com "Infinity"
+						</small>
+					</div>
+					<div class="form-group col-md-5">
+						<label class="mt-4 mb-1" for="author">Criado por</label>
+						<input autocomplete="off" aria-describedby="Criado por" required name="author" type="text" class="form-control" id="author" value="<%= user.name %>" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="mt-4 mb-1" for="title">Título do artigo</label>
+					<input autocomplete="off" aria-describedby="Título do artigo" required name="title" type="text" class="form-control" id="title" placeholder="Veja como criar uma sala no Infinitychat" maxlength="70" value="<%= article.title %>">
+				</div>
+				<div class="form-group">
+					<label class="mt-4 mb-1" for="primary">Link da imagem principal</label>
+					<input autocomplete="off" aria-describedby="Link para a imagem principal" required name="primary" type="text" class="form-control" id="primary" placeholder="https://infinity/posts/img-scroll" maxlength="100" value="<%= article.primary %>">
+					<small id="primary-help" class="form-text text-muted">
+						As imagens devem ser adicionadas aos artigos através de um link. O usuário deve possuir um repositório fixo para elas.
+					</small>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-8">
+						<label class="mt-4 mb-1" for="description">Descrição do artigo</label>
+						<textarea minlength="400" required style="height: 200px;" class="form-control" id="description" name="description"><%= article.description %></textarea>
+					</div>
+					<div class="form-group col-md-4">
+						<label class="mt-4 mb-1" for="markdown">Markdown</label>
+						<select aria-describedby="Remarcadores" name="markdown" class="form-control form-select" id="markdown">
+							<option value="Programação">Programação</option>
+							<option value="Artigo Infinity">Artigo Infinity</option>
+							<option value="Comentário">Comentários</option>
+							<option value="Mundo Geek">Mundo Geek</option>
+							<option value="<%= article.markdown %>" selected><%= article.markdown %></option>
+						</select>
+						<small id="markdown-help" class="form-text text-muted">
+							Selecione o assunto principal do seu artigo
+						</small>
+					</div>
+				</div>
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+				<div class="card mt-4">
+					<div class="card-header">
+						<ul class="nav nav-pills card-header-pills">
+							<li class="nav-item">
+								<a role="button" class="nav-link active" id="add">Validar</a>
+							</li>
+							<li class="nav-item">
+								<a role="button" class="nav-link" id="plus">Novo parágrafo</a>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body" id="contents">
+						<small id="danger-help" class="form-text text-danger"></small>
+						<!-- Parágrafo 1 -->
+						<div class="form-group">
+							<input autocomplete="off" aria-describedby="Título do Parágrafo 1" required name="h1" type="text" class="form-control mb-2" placeholder="Introdução - Subtítulo" maxlength="70" value="<%= article.h1 %>">
+						</div>
+						<div class="form-floating">
+							<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="introduction" name="introduction"><%= article.introduction %></textarea>
+							<label for="introduction">Introdução</label>
+						</div>
+						<!-- Parágrafo 2 -->
+						<div id="paragraph">
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h2" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h2 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img" maxlength="100" value="<%= article.img %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development" name="development"><%= article.development %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% if(article.h21 || article.development1) { %>
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h21" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h21 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img1" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img1" maxlength="100" value="<%= article.img1 %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development1" name="development1"><%= article.development1 %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% } %>
+							<% if(article.h22 || article.development2) { %>
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h22" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h22 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img2" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img2" maxlength="100" value="<%= article.img2 %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development2" name="development2"><%= article.development2 %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% } %>
+							<% if(article.h23 || article.development3) { %>
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h23" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h23 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img3" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img3" maxlength="100" value="<%= article.img3 %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development3" name="development3"><%= article.development3 %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% } %>
+							<% if(article.h24 || article.development4) { %>
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h24" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h24 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img4" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img4" maxlength="100" value="<%= article.img4 %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development4" name="development4"><%= article.development4 %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% } %>
+							<% if(article.h25 || article.development5) { %>
+							<div class="row mt-5">
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Título do Parágrafo 2" required name="h25" type="text" class="form-control mb-2" placeholder="Desenvolvimento - Subtítulo" maxlength="70" value="<%= article.h25 %>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<input autocomplete="off" aria-describedby="Link para imagem" name="img5" type="text" class="form-control mb-2" placeholder="Link para imagem" id="img5" maxlength="100" value="<%= article.img5 %>">
+									</div>
+								</div>
+							</div>
+							<div class="form-floating">
+								<textarea minlength="400" required style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development5" name="development5"><%= article.development5 %></textarea>
+								<label for="development">Desenvolvimento</label>
+							</div>
+							<% } %>
+						</div>
+						<!-- Parágrafo 3 -->
+						<div class="form-group">
+							<input autocomplete="off" aria-describedby="Título do artigo" name="h3" type="text" class="form-control mt-5 mb-2" placeholder="Conclusão - Subtítulo" maxlength="70" value="<%= article.h3 %>">
+						</div>
+						<div class="form-floating">
+							<textarea minlength="100" style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="ending" name="ending"><%= article.ending %></textarea>
+							<label for="ending">Encerramento</label>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="_id" value="<%= article._id %>">
+				<button type="submit" class="btn mt-5 btn-primary">Atualizar Post</button>
+			</form>
+			<% } %>
 		</main>
 	</section>
 

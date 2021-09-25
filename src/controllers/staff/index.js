@@ -1,4 +1,5 @@
 const Login = require('../../models/Login');
+const Article = require('../../models/Article');
 
 exports.index = (req, res) => res.render('staff');
 
@@ -7,7 +8,20 @@ exports.system = (req, res) => {
     return res.render('system');
 }
 
-exports.edition = (req, res) => res.render('staff');
+exports.edition = async (req, res) => {
+    if(!req.session.user) return res.redirect('/');
+    const { id } = req.params;
+    const article = await Article.SearchArticleById(id);
+    console.log(article);
+    if(!article) {
+        req.flash('errors', 'Post não encontrado');
+        req.session.save(() => {
+            return res.redirect('/staff');
+        });
+        return;
+    }
+    return res.render('article-render', { article });
+};
 
 exports.login = async (req, res) => {
 	try {
@@ -35,6 +49,7 @@ exports.login = async (req, res) => {
 
 exports.signUp = async (req, res) => {
 	try {
+        if(!req.session.user) return res.redirect('/');
         const login = new Login(req.body);
         await login.signUp();
         if(login.errors.length > 0) {

@@ -15,13 +15,13 @@ route.post('/staff/login', staff.login);
 route.post('/staff-new-user', loginRequired, staff.signUp);
 route.get('/staff/out', staff.out);
 route.get('/system', loginRequired, staff.system);
-route.post('/system.edition/:id', loginRequired, staff.edition);
 
 //Rotas da administração de artigos 
 route.get('/system.article', loginRequired, article.index);
 route.post('/system.article', loginRequired, article.render);
+route.get('/system.edition=:id', loginRequired, staff.edition);
 
 //Rota do Post
-route.get('/:id', post.index);
+route.get('/post=:id', post.index);
 
 module.exports = route;

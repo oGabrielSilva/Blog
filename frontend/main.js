@@ -1,5 +1,5 @@
 import funReadMore from './modules/post';
-import { funHomeHeader } from './modules/homeHeader';
+import funHomeHeader from './modules/homeHeader';
 import funStaff, { funEditionPost } from './modules/staff';
 import funRenderArticle from './modules/renderArticle';
 
@@ -24,5 +24,5 @@ if(homeHeader) {
 
 if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
 else if(form && form.getAttribute('id') === 'render-article') funRenderArticle();
-if(post && post.value === window.location.pathname.split('/')[1]) funReadMore(socket);
+if(post && post.value === window.location.pathname.split('=')[1]) funReadMore(socket);
 if(edition) funEditionPost(edition, socket);

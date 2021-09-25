@@ -38,7 +38,7 @@ export default function funStaff() {
 
 //---------------------------------------------------------------
 function funEditPanelHtml() {
-	const editPanelHtml = Html.Node('section');
+	const editPanelHtml = Html.Node('section', [{attr: 'class', val: 'mb-5'}]);
 	const form = Html.Node('form', [{attr: 'id', val: 'form-edit-panel'}, {attr: 'class', val: 'row mb-3'}]);
 	const divColSm = () => Html.Node('div', [{attr: 'class', val: 'col-sm-6'}]);
 	const formGroup = () => Html.Node('div', [{attr: 'class', val: 'form-group'}]);
@@ -51,9 +51,12 @@ function funEditPanelHtml() {
 	const divColSm2 = divColSm();
 	const label1 = label('title');
 	const label2 = label('id');
-
+	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3 mt-3'}]);
+	const goBack = Html.Node('a', [{attr: 'class', val: 'text-decoration-underline fw-light'}, {attr: 'href', val: '/system'}]);
+	goBack.innerText = 'Voltar';
 	label2.innerText = 'Por ID';
 	label1.innerText = 'Por título';
+
 	formGroup1.appendChild(label1);
 	formGroup1.appendChild(input('title'));
 	formGroup2.appendChild(label2);
@@ -62,8 +65,11 @@ function funEditPanelHtml() {
 	divColSm1.appendChild(formGroup1);
 	divColSm2.appendChild(formGroup2);
 
-	form.appendChild(divColSm1)
-	form.appendChild(divColSm2)
+	form.appendChild(divColSm1);
+	form.appendChild(divColSm2);
+	p.innerText = 'Pesquise o post que quer editar por título ou id:'
+	editPanelHtml.appendChild(goBack);
+	editPanelHtml.appendChild(p);
 	editPanelHtml.appendChild(form);
 	return editPanelHtml;
 }
@@ -118,6 +124,8 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }) {
 function returnPanel(socket, main) {
 	const panelHtml = funEditPanelHtml();
 	const editPanelHtml = Html.Node('div', [{attr: 'class', val: 'row row-cols-1 row-cols-md-3 g-4'}]);
+	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3'}]);
+	p.innerText = 'Veja os últimos posts';
 
 	const articles = [];
 	socket.emit('req-articles');
@@ -130,7 +138,9 @@ function returnPanel(socket, main) {
 			const reEditPanelCardHtml = funEditPanelCardHtml(val);
 			editPanelHtml.appendChild(reEditPanelCardHtml);
 		});
+
 		document.querySelector('section').appendChild(panelHtml);
+		document.querySelector('section').appendChild(p);
 		document.querySelector('section').appendChild(editPanelHtml);
 		return main.classList.toggle('d-none');
 	});
