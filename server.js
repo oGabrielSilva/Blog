@@ -61,6 +61,7 @@ app.use(checkCsrfError);
 app.use(routes);
 
 io.on('connection', socket => {
+    socket.on('hello', () => console.log('Hello'));
     socket.on('req-articles', () => Article.Search().then(e => socket.emit('re-articles', e)));
     socket.on('search', id => Article.SearchArticleById(id).then(e => socket.emit('re-article-by-id', e)));
 });

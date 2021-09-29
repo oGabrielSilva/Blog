@@ -8,6 +8,29 @@ const fun = e => {
 	return;
 };
 
+function createButtonConfirm(id) {
+	const section = Html.Node('section', [
+		{attr: 'class', val: 'border rounded shadow-sm p-3 d-block overflow-auto'},
+		{attr: 'style', val: `min-height: 40vh; width: 50vw; position: absolute; 
+			top: 50%; right: 50%; transform: translate(50%, -50%);`}
+	]);
+	const firstRow = Html.Node('div', [{attr: 'class', val: 'row'}]);
+	const firstCol = Html.Node('div', [{attr: 'class', val: 'col text-center'}]);
+	firstCol.appendChild(Html.Node('p', [{attr: 'class', val: 'h5 p-title-1'}]));
+	firstCol.appendChild(Html.Node('p', [{attr: 'class', val: 'fw-light p-text-1'}]));
+	firstCol.querySelector('.p-title-1').innerText = 'Deletar post';
+	firstCol.querySelector('.p-text-1').innerText = `Você realmente deseja deletar o post ${id}? 
+		Após deletar, todos os dados serão perdidos. Clique para confirmar.`;
+	firstRow.appendChild(firstCol);
+	
+	const secondRow = Html.Node('div', [{attr: 'class', val: 'row'}]);
+}
+
+function funDel(e, id, socket) {
+	e.preventDefault();
+	socket.emit('delete post', { id });
+}
+
 function cleanUp(inputs) {
 	let items = inputs;
 	const errors = [];
@@ -74,7 +97,7 @@ function funEditPanelHtml() {
 	return editPanelHtml;
 }
 
-function funEditPanelCardHtml({ title, primary, description, _id, createdAt }) {
+function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, socket) {
 	const div = val => Html.Node('div', [{attr: 'class', val}]);
 	const img = val => Html.Node('img', [{attr: 'src', val}, {attr: 'class', val: 'card-img-top'}]);
 	const h5 = () => Html.Node('h5', [{attr: 'class', val: 'card-title'}]);
@@ -95,10 +118,16 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }) {
 	const access = a(`/post=${_id}`);
 	const edition = a(`/system.edition=${_id}`);
 	const accessDiv = div('');
+	const del = a(`#`);
 	access.innerText = 'Acessar';
 	edition.innerText = 'Editar';
+	del.innerText = 'Deletar';
+	del.setAttribute('class', 'btn btn-danger m-1');
+	del.setAttribute('target', '_self');
+	del.addEventListener('click', e => funDel(e, _id, socket));
 	accessDiv.appendChild(access);
 	accessDiv.appendChild(edition);
+	accessDiv.appendChild(del);
 
 	const cardFooter = div('card-footer');
 	const footerSmall = small();
@@ -138,7 +167,7 @@ function returnPanel(socket, main) {
 			articles.push({ title, description, primary, _id, createdAt });
 		});
 		articles.forEach(val => {
-			const reEditPanelCardHtml = funEditPanelCardHtml(val);
+			const reEditPanelCardHtml = funEditPanelCardHtml(val, socket);
 			editPanelHtml.appendChild(reEditPanelCardHtml);
 		});
 
