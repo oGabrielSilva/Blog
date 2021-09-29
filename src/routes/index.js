@@ -20,6 +20,7 @@ route.get('/system', loginRequired, staff.system);
 route.get('/system.article', loginRequired, article.index);
 route.post('/system.article', loginRequired, article.render);
 route.get('/system.edition=:id', loginRequired, staff.edition);
+route.post('/system.article.edition', loginRequired, article.renderEdition);
 
 //Rota do Post
 route.get('/post=:id', post.index);

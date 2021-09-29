@@ -80,7 +80,7 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }) {
 	const h5 = () => Html.Node('h5', [{attr: 'class', val: 'card-title'}]);
 	const p = () => Html.Node('p', [{attr: 'class', val: 'card-text'}]);
 	const form = val => Html.Node('form', [{attr: 'method', val: 'GET'}, {attr: 'action', val}]);
-	const a = val => Html.Node('a', [{attr: 'href', val }, {attr: 'target', val: '_blank'}, {attr: 'class', val: 'btn btn-danger'}]);
+	const a = val => Html.Node('a', [{attr: 'href', val }, {attr: 'target', val: '_blank'}, {attr: 'class', val: 'btn btn-primary m-1'}]);
 	const small = () => Html.Node('small', [{attr: 'class', val: 'text-muted'}]);
 
 	const editPanelCardHtml = div('col');
@@ -92,10 +92,13 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }) {
 	const cardP = p();
 	const cardSmall = small();
 	
-	const access = a(`/${_id}`);
+	const access = a(`/post=${_id}`);
+	const edition = a(`/system.edition=${_id}`);
 	const accessDiv = div('');
 	access.innerText = 'Acessar';
+	edition.innerText = 'Editar';
 	accessDiv.appendChild(access);
+	accessDiv.appendChild(edition);
 
 	const cardFooter = div('card-footer');
 	const footerSmall = small();

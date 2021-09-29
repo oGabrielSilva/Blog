@@ -47,6 +47,21 @@ module.exports = class Article {
         this.article = await PostModel.create(this.body);
     }
 
+    async edition() {
+        this.valid();
+        if(this.body._id) {
+            this.article = await PostModel.findByIdAndUpdate(this.body._id, this.body, function(err, docs) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log('updated: ', docs);
+                }
+            });
+            return;
+        };
+        if(!this.article) return this.errors.push('Post não encontrado');
+    }
+
     static async Search(limit = 7) {
         const articles = await PostModel.find().sort({ '_id': -1 }).limit(limit); //Funciona, não mexer...
         if(!articles) return null;
