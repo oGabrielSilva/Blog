@@ -9,26 +9,54 @@ const fun = e => {
 };
 
 function createButtonConfirm(id) {
+	const width = window.innerWidth < 768 ? 80 : 50;
+	const div = Html.Node('div', [{attr: 'style', val: 'height: 100vh; width: 100vw; position: fixed; top: 0; left: 0;'},
+		{attr: 'id', val: 'div-delete-a-post'}]);
 	const section = Html.Node('section', [
-		{attr: 'class', val: 'border rounded shadow-sm p-3 d-block overflow-auto'},
-		{attr: 'style', val: `min-height: 40vh; width: 50vw; position: absolute; 
-			top: 50%; right: 50%; transform: translate(50%, -50%);`}
-	]);
+		{attr: 'class', val: 'border rounded shadow-sm p-3 d-flex overflow-auto bg-light justify-content-center flex-column'},
+		{attr: 'style', val: `min-height: 40vh; width: ${width}vw; position: fixed; 
+		top: 50%; right: 50%; transform: translate(50%, -50%);`}
+		]);
 	const firstRow = Html.Node('div', [{attr: 'class', val: 'row'}]);
 	const firstCol = Html.Node('div', [{attr: 'class', val: 'col text-center'}]);
+
 	firstCol.appendChild(Html.Node('p', [{attr: 'class', val: 'h5 p-title-1'}]));
 	firstCol.appendChild(Html.Node('p', [{attr: 'class', val: 'fw-light p-text-1'}]));
+
 	firstCol.querySelector('.p-title-1').innerText = 'Deletar post';
-	firstCol.querySelector('.p-text-1').innerText = `Você realmente deseja deletar o post ${id}? 
-		Após deletar, todos os dados serão perdidos. Clique para confirmar.`;
-	firstRow.appendChild(firstCol);
-	
+	firstCol.querySelector('.p-text-1').innerText = `Você realmente deseja remover o post ${id}? 
+	Após remover, todos os dados serão perdidos. Clique para confirmar.`;
+
 	const secondRow = Html.Node('div', [{attr: 'class', val: 'row'}]);
+	const firstColToSecondRow = Html.Node('div', [{attr: 'class', val: 'col text-center'}]);
+
+	firstColToSecondRow.appendChild(Html.Node('button', [{attr: 'class', val: 'btn btn-success m-1 b-confirm-1'}]));
+	firstColToSecondRow.appendChild(Html.Node('button', [{attr: 'class', val: 'btn btn-danger m-1 b-danger-1'}]));
+
+	firstColToSecondRow.querySelector('.b-confirm-1').innerText = 'Excluir';
+	firstColToSecondRow.querySelector('.b-danger-1').innerText = 'Manter';
+
+	firstRow.appendChild(firstCol);
+	secondRow.appendChild(firstColToSecondRow);
+
+	section.appendChild(firstRow);
+	section.appendChild(secondRow);
+	div.appendChild(section);
+	return div;
 }
 
 function funDel(e, id, socket) {
 	e.preventDefault();
-	socket.emit('delete post', { id });
+	document.body.appendChild(createButtonConfirm(id));
+	document.body.querySelector('#div-delete-a-post').addEventListener('click', event => {
+		const father = document.querySelector('#div-delete-a-post');
+		const btnConfirm = document.body.querySelector('.b-confirm-1');
+		const btnDanger = document.body.querySelector('.b-danger-1');
+		const { target } = event;
+		if(target === btnConfirm) return socket.emit('hello');
+		else if(target === btnDanger || target === father) return father.remove();
+		else return;
+	})
 }
 
 function cleanUp(inputs) {
