@@ -1,6 +1,9 @@
 import Article from './Article';
 import Html from '../html';
 
+const main = document.querySelector('#render-article');
+let index = 0;
+
 function createParagraph(index) {
 	const father = Html.Node('div', [{attr: 'class', val: 'row mt-5'}]);
 	const firstCol = Html.Node('div', [{attr: 'class', val: 'col-sm-6'}]);
@@ -37,9 +40,6 @@ function createParagraph(index) {
 
 	return father;
 }
-
-const main = document.querySelector('#render-article');
-let index = 0;
 
 function valid() {
 	const texts = main.querySelector('#contents').querySelectorAll('textarea');
@@ -101,41 +101,21 @@ const fun = e => {
 	main.querySelector('button').classList.add('bg-danger')
 	setTimeout(() => main.querySelector('button').classList.remove('bg-danger'), 5000);
 }
-// let copy = `
-// <div class="row mt-5">
-// 	<div class="col-md-6">
-// 		<div class="form-group">
-// 			<input autocomplete="off" aria-describedby="Título do Parágrafo 2" 
-// 			required="" name="h2" id="h2" type="text" class="form-control mb-2" 
-// 			placeholder="Desenvolvimento - Subtítulo" maxlength="70">
-// 		</div>
-// 	</div>
-// 	<div class="col-md-6">
-// 		<div class="form-group">
-// 			<input autocomplete="off" aria-describedby="Link para imagem" name="img" 
-// 			type="text" class="form-control mb-2" placeholder="Link para imagem" id="img" 
-// 			maxlength="100">
-// 		</div>
-// 	</div>
-// </div>
-// <div class="form-floating">
-// 	<textarea minlength="400" required="" style="height: 300px;" class="form-control" placeholder="Leave a comment here" id="development" name="development"></textarea>
-// 	<label for="development">Desenvolvimento</label>
-// </div>`;
+
+const funPlus = e => {
+	e.preventDefault();
+	if(!confirm('Será criado um novo parágrafo. Clique em "OK" para confirmar.')) return;
+	index += 1;
+	const container = main.querySelector('#paragraph');
+	const headers = document.createElement('div');
+	headers.appendChild(createParagraph(index));
+	container.appendChild(headers);
+	setTimeout(() => container.querySelector(`#h2${String(index)}`).focus(), 100);
+	if(index === 5) return main.querySelector('#plus').setAttribute('class', 'nav-link disabled');
+}
 
 export default function funRenderArticle() {
 	main.querySelector('#add').addEventListener('click', valid);
-	main.querySelector('#plus').addEventListener('click', e => {
-		e.preventDefault();
-		if(!confirm('Será criado um novo parágrafo. Clique em "OK" para confirmar.')) return;
-		index += 1;
-		const container = main.querySelector('#paragraph');
-		const headers = document.createElement('div');
-		headers.appendChild(createParagraph(index));
-		container.appendChild(headers);
-		setTimeout(() => container.querySelector(`#h2${String(index)}`).focus(), 100);
-		if(index === 5) return main.querySelector('#plus').setAttribute('class', 'nav-link disabled');
-	});
-
+	main.querySelector('#plus').addEventListener('click', funPlus);
 	main.addEventListener('submit', fun);
 };

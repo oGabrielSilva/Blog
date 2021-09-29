@@ -1,20 +1,41 @@
-const html = `
-	<section>
-		<img src="#" class="mx-auto w-75 d-block mb-5 mt-5">
-		<p class="h2 mb-4 text-break">%</p>
-		<p>@</p>
-	</section>`;
+import Html from '../html';
+
+const html = ({ 
+	src,
+	text, 
+	title
+	}) => {
+	if(!src && !text && !title) return null;
+
+	const section = Html.Node('section');
+	
+	const img = Html.Node('img', [
+		{attr: 'src', val: src}, 
+		{attr: 'class', val: 'mx-auto w-75 d-block mb-5 mt-5'}
+	]);
+
+	const h2 = Html.Node('p', [{attr: 'class', val: 'h2 mb-4 text-break'}]);
+	h2.innerText = String(title);
+
+	const p = Html.Node('p');
+	p.innerText = String(text);
+
+	section.appendChild(h2);
+	section.appendChild(img);
+	section.appendChild(p);
+	return section;
+}
 
 function setReadMore(obj, pathname) {
 	const main = document.querySelector('main');
 	if(pathname !== obj._id) return;
-	let section = '';
+	const section = Html.Node('div');
 
 	const { h21, h22, h23, h24, h25, h3 } = obj;
 	const { img1, img2, img3, img4, img5 } = obj;
-	const { 
-		development1, development2, development3,
-		development4, development5, ending } = obj;
+	const { development1, development2, development3,
+		development4, development5, ending 
+	} = obj;
 
 	const body = [
 		[h21, img1, development1], [h22, img2, development2], 
@@ -24,21 +45,27 @@ function setReadMore(obj, pathname) {
 
 	for (let elm of body) {
 		if(!elm[0] && !elm[2]) continue;
-		let path = html.replace(/\#/g, elm[1]); 
-		path = path.replace(/\%/g, elm[0]); 
-		path = path.replace(/\@/g, elm[2]); 
-		section += path;
+		const path = html({
+			title: elm[0],
+			src: elm[1],
+			text: elm[2]
+		});
+		section.appendChild(path);
 	}
 	
-	let path = html.replace(/\%/g, h3);
-	path = path.replace(/\@/g, ending);
-	path = path.replace('<img src="#" class="mx-auto w-75 d-block mb-5 mt-5">', '');
-	section += path;
+	const path = html({
+		title: h3,
+		text: ending,
+		src: window.location.pathname
+	});
+	
+	path.querySelector('img').remove();
+	section.appendChild(path);
 	
 	main.querySelector('#read-more').addEventListener('click', e => {
 		e.preventDefault();
 		e.target.parentElement.parentElement.remove();
-		main.innerHTML += section;
+		main.appendChild(section);
 	});
 }
 
