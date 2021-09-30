@@ -1,6 +1,6 @@
 {
   "name": "projeto_blog",
-  "version": "0.0.31",
+  "version": "0.1.0",
   "description": "",
   "main": "server.js",
   "scripts": {

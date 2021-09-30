@@ -53,7 +53,14 @@ function funDel(e, id, socket) {
 		const btnConfirm = document.body.querySelector('.b-confirm-1');
 		const btnDanger = document.body.querySelector('.b-danger-1');
 		const { target } = event;
-		if(target === btnConfirm) return socket.emit('hello');
+		if(target === btnConfirm) {
+			socket.on('post deleted', () => {
+				console.log('Post deletado:', id);
+				e.target.parentElement.parentElement.parentElement.parentElement.remove();
+				return father.remove();
+			});
+			return socket.emit('delete a post', id);
+		}
 		else if(target === btnDanger || target === father) return father.remove();
 		else return;
 	})

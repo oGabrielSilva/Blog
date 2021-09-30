@@ -64,6 +64,11 @@ io.on('connection', socket => {
     socket.on('hello', () => console.log('Hello'));
     socket.on('req-articles', () => Article.Search().then(e => socket.emit('re-articles', e)));
     socket.on('search', id => Article.SearchArticleById(id).then(e => socket.emit('re-article-by-id', e)));
+    socket.on('delete a post', id => {
+        Article.SearchArticleByIdAndDelete(id)
+        .then(article => socket.emit('post deleted', article))
+        .catch(e => console.log('Erro ao buscar artigo para deletar.', e));
+    });
 });
 
 app.on('connect', () => {

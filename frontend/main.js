@@ -4,6 +4,7 @@ import funStaff, { funEditionPost } from './modules/staff';
 import funRenderArticle from './modules/renderArticle';
 
 const socket = io();
+
 const homeHeader = document.querySelector('#home-header');
 const form = document.querySelector('form');
 const post = document.querySelector('#_id');

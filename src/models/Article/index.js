@@ -83,6 +83,21 @@ module.exports = class Article {
         }
     }
 
+    static async SearchArticleByIdAndDelete(id) {
+        try {
+            const article = await PostModel.findByIdAndDelete(id, function(err, docs) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log('Deleted', docs._id);
+                }
+            });
+        } catch(e) {
+            console.log(e);
+            return null;
+        }
+    }
+
     valid() {
         for(let key in this.body) {
             if(typeof this.body[key] !== 'string') {
