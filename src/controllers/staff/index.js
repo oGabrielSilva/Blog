@@ -11,7 +11,7 @@ exports.system = (req, res) => {
 exports.edition = async (req, res) => {
     if(!req.session.user) return res.redirect('/');
     const { id } = req.params;
-    const article = await Article.SearchArticleById(id);
+    const article = await Article.SearchById(id);
     if(!article) {
         req.flash('errors', 'Post não encontrado');
         req.session.save(() => {

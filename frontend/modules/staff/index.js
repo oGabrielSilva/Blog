@@ -95,9 +95,10 @@ export default function funStaff() {
 };
 
 //---------------------------------------------------------------
-function funEditPanelHtml() {
+function funEditPanelHtml(socket) {
 	const editPanelHtml = Html.Node('section', [{attr: 'class', val: 'mb-5'}]);
-	const form = Html.Node('form', [{attr: 'id', val: 'form-edit-panel'}, {attr: 'class', val: 'row mb-3'}]);
+	const form = Html.Node('form', [{attr: 'id', val: 'form-edit-panel'}, {attr: 'class', val: 'mb-3'}]);
+	const row = Html.Node('div', [{attr: 'class', val: 'row'}])
 	const divColSm = () => Html.Node('div', [{attr: 'class', val: 'col-sm-6'}]);
 	const formGroup = () => Html.Node('div', [{attr: 'class', val: 'form-group'}]);
 	const label = val => Html.Node('label', [{attr: 'for', val}, {attr: 'class', val: 'mt-4 mb-1'}]);
@@ -111,6 +112,10 @@ function funEditPanelHtml() {
 	const label2 = label('id');
 	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3 mt-3'}]);
 	const goBack = Html.Node('a', [{attr: 'class', val: 'text-decoration-underline fw-light'}, {attr: 'href', val: '/system'}]);
+	const search = Html.Node('button', [{attr: 'class', val: 'btn btn-primary mt-3'}]);
+	
+
+	search.innerText = 'Pesquisar';
 	goBack.innerText = 'Voltar';
 	label2.innerText = 'Por ID';
 	label1.innerText = 'Por título';
@@ -123,13 +128,45 @@ function funEditPanelHtml() {
 	divColSm1.appendChild(formGroup1);
 	divColSm2.appendChild(formGroup2);
 
-	form.appendChild(divColSm1);
-	form.appendChild(divColSm2);
+	row.appendChild(divColSm1);
+	row.appendChild(divColSm2);
+	form.appendChild(row);
+	form.appendChild(search);
 	p.innerText = 'Pesquise o post que quer editar por título ou id:'
 	editPanelHtml.appendChild(goBack);
 	editPanelHtml.appendChild(p);
 	editPanelHtml.appendChild(form);
+	form.addEventListener('submit', event => searchPostByIdOrTitle({ event, form }, socket));
+	socket.on('error', () => {
+		titleForm.style.borderColor = '#f00';
+		idForm.style.borderColor = '#f00';
+	}); 
+	socket.on('found article', articles => setArticlesFounded({ articles }, socket));
 	return editPanelHtml;
+}
+
+function setArticlesFounded({ articles }, socket) {
+	const section = document.querySelector('section');
+	section.innerHTML = '';
+	const panelHtml = Html.Node('div');
+	const goBack = Html.Node('a', [{attr: 'class', val: 'text-decoration-underline fw-light'}, {attr: 'href', val: '/system'}]);
+	goBack.innerText = 'Voltar';
+	panelHtml.appendChild(goBack);
+	const editPanelHtml = Html.Node('div', [{attr: 'class', val: 'row row-cols-1 row-cols-md-3 g-4'}]);
+	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3'}]);
+	p.innerText = `Posts encontrados: ${articles.length}`;
+	const vetor = [];
+	createArticleDoc({ elms: articles, articles: vetor, editPanelHtml, p, panelHtml }, socket);
+}
+
+function searchPostByIdOrTitle({ event, form }, socket) {
+	event.preventDefault();
+	const titleForm = form.querySelector('#title');
+	const idForm = form.querySelector('#id');
+	if(!idForm.value && !titleForm.value) return titleForm.focus();
+	const title = titleForm.value ? String(titleForm.value) : null;
+	const id = idForm.value ? String(idForm.value) : null;
+	return socket.emit('search post by id or title', { id, title });
 }
 
 function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, socket) {
@@ -189,28 +226,31 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, s
 }
 
 function returnPanel(socket, main) {
-	const panelHtml = funEditPanelHtml();
+	const panelHtml = funEditPanelHtml(socket);
 	const editPanelHtml = Html.Node('div', [{attr: 'class', val: 'row row-cols-1 row-cols-md-3 g-4'}]);
 	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3'}]);
-	p.innerText = 'Veja os últimos posts';
-
+	p.innerText = 'Veja os últimos posts:';
 	const articles = [];
 	socket.emit('req-articles');
 	socket.on('re-articles', elms => {
-		elms.forEach(elm => {
-			const { title, description, primary, createdAt, _id  } = elm;
-			articles.push({ title, description, primary, _id, createdAt });
-		});
-		articles.forEach(val => {
-			const reEditPanelCardHtml = funEditPanelCardHtml(val, socket);
-			editPanelHtml.appendChild(reEditPanelCardHtml);
-		});
-
-		document.querySelector('section').appendChild(panelHtml);
-		document.querySelector('section').appendChild(p);
-		document.querySelector('section').appendChild(editPanelHtml);
+		createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, socket);
 		return main.classList.toggle('d-none');
 	});
+}
+
+function createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, socket) {
+	elms.forEach(elm => {
+		const { title, description, primary, createdAt, _id  } = elm;
+		articles.push({ title, description, primary, _id, createdAt });
+	});
+	articles.forEach(val => {
+		const reEditPanelCardHtml = funEditPanelCardHtml(val, socket);
+		editPanelHtml.appendChild(reEditPanelCardHtml);
+	});
+
+	document.querySelector('section').appendChild(panelHtml);
+	document.querySelector('section').appendChild(p);
+	document.querySelector('section').appendChild(editPanelHtml);
 }
 
 function createEditPanel(e, socket) {
@@ -223,4 +263,8 @@ function createEditPanel(e, socket) {
 
 export function funEditionPost(edition, socket) {
 	edition.addEventListener('click', e => createEditPanel(e, socket));
+	document.querySelector('#system-delete').addEventListener('click', e => {
+		e.preventDefault();
+		createEditPanel(e, socket);
+	});
 };

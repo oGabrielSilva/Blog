@@ -62,12 +62,24 @@ app.use(routes);
 
 io.on('connection', socket => {
     socket.on('hello', () => console.log('Hello'));
+    
     socket.on('req-articles', () => Article.Search().then(e => socket.emit('re-articles', e)));
-    socket.on('search', id => Article.SearchArticleById(id).then(e => socket.emit('re-article-by-id', e)));
+    
+    socket.on('search', id => Article.SearchById(id).then(e => socket.emit('re-article-by-id', e)));
+
     socket.on('delete a post', id => {
-        Article.SearchArticleByIdAndDelete(id)
+        Article.SearchByIdAndDelete(id)
         .then(article => socket.emit('post deleted', article))
         .catch(e => console.log('Erro ao buscar artigo para deletar.', e));
+    });
+
+    socket.on('search post by id or title', value => {
+        const id = value.id !== null && value.id.length === 24 ? value.id : null;
+        const title = value.title !== null && value.title.length < 71 ? value.title : null;
+        if(id === null && title === null) return socket.emit('error');
+        if(id) return Article.SearchById(id).then(at => socket.emit('found article', at));
+        else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', at));
+        return;
     });
 });
 

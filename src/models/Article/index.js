@@ -62,18 +62,26 @@ module.exports = class Article {
         if(!this.article) return this.errors.push('Post não encontrado');
     }
 
+    async articleExist() {
+        this.article = await PostModel.findOne({ title: this.body.title });
+        if(this.article) this.errors.push('Artigo de mesmo título já existe');
+    }
+
+    valid() {
+        for(let key in this.body) {
+            if(typeof this.body[key] !== 'string') {
+                this.body[key] = '';
+            }
+        }
+    }
+
     static async Search(limit = 7) {
         const articles = await PostModel.find().sort({ '_id': -1 }).limit(limit); //Funciona, não mexer...
         if(!articles) return null;
         return articles;
     }
 
-    async articleExist() {
-        this.article = await PostModel.findOne({ title: this.body.title });
-        if(this.article) this.errors.push('Artigo de mesmo título já existe');
-    }
-
-    static async SearchArticleById(id) {
+    static async SearchById(id) {
         try {
             const article = await PostModel.findById(id);
             return article;
@@ -83,7 +91,7 @@ module.exports = class Article {
         }
     }
 
-    static async SearchArticleByIdAndDelete(id) {
+    static async SearchByIdAndDelete(id) {
         try {
             const article = await PostModel.findByIdAndDelete(id, function(err, docs) {
                 if(err) {
@@ -98,11 +106,14 @@ module.exports = class Article {
         }
     }
 
-    valid() {
-        for(let key in this.body) {
-            if(typeof this.body[key] !== 'string') {
-                this.body[key] = '';
-            }
+    static async SearchByRegex(regex) {
+        try {
+            const rgx = new RegExp(regex, 'i');
+            const article = await PostModel.find({ "title": rgx }).limit(6);
+            return article;
+        } catch(e) {
+            console.log(e);
+            return null;
         }
     }
 };

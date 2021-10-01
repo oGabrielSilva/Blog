@@ -2,7 +2,7 @@ const Article = require('../../models/Article');
 
 exports.index = async (req, res) => {
 	try {
-		const article = await Article.SearchArticleById(req.params.id);
+		const article = await Article.SearchById(req.params.id);
 		if(!article) {
 			req.flash('errors', ['Aconteceu algo de errado? Nos contate. :3']);
 			req.session.save(function() {
