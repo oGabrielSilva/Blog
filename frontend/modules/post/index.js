@@ -1,10 +1,6 @@
 import Html from '../html';
 
-const html = ({ 
-	src,
-	text, 
-	title
-	}) => {
+const html = ({ src, text, title }) => {
 	if(!src && !text && !title) return null;
 
 	const section = Html.Node('section');
@@ -71,6 +67,7 @@ function setReadMore(obj, pathname) {
 
 export default function funReadMore(socket) {
 	const pathname = window.location.pathname.split('=')[1];
+	socket.emit('statistics', pathname);
 	socket.emit('search', pathname);
 	socket.on('re-article-by-id', obj => setReadMore(obj, pathname));
 };

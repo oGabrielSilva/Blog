@@ -261,10 +261,73 @@ function createEditPanel(e, socket) {
 	return returnPanel(socket, main);
 }
 
+//-------------------------------------------------------------
+
+function createStatisticsPanel(e, socket) {
+	e.preventDefault();
+	const main = document.querySelector('main');
+	e.target.classList.add('disabled');
+	e.target.innerText = 'Carregando';
+	return returnPanelStatistics(socket, main);
+}
+
+function returnPanelStatistics(socket, main) {
+	socket.emit('req-articles', 10);
+	socket.on('re-articles', arts => createTableStatistics({ arts, main }));
+}
+
+function createTableStatistics({ main, arts }) {
+	const div = val => Html.Node('div', [{attr: 'class', val}]);
+	const img = val => Html.Node('img', [{attr: 'src', val}, {attr: 'class', val: 'card-img-top'}]);
+	const h5 = () => Html.Node('h5', [{attr: 'class', val: 'card-title'}]);
+	const small = () => Html.Node('small', [{attr: 'class', val: 'text-muted'}]);
+
+	const control = div();
+	const goBack = Html.Node('a', [{attr: 'class', val: 'text-decoration-underline fw-light'}, {attr: 'href', val: '/system'}]);
+	goBack.innerText = 'Retornar';
+	control.appendChild(goBack);
+	const controlTitle = h5();
+	controlTitle.innerText = 'Veja as estatísticas dos posts em níveis (1 é o mais baixo):';
+	control.appendChild(controlTitle);
+
+	const row = div('row row-cols-1 row-cols-md-3 g-4 mt-2');
+
+	arts.forEach(elm => {
+		const col = div('col');
+		const card = div('card h-100');
+		const icon = img(elm.primary);
+		const cardBody = div('card-body');
+		const cardFooter = div('card-footer');
+		const cardTitle = h5();
+		const smallText = small();
+		const smallFooter = small();
+		const statistics = Html.Node('p', [{attr: 'class', val: 'fw-light'}]);
+
+		cardTitle.innerText = elm.title;
+		smallText.innerText = elm._id;
+		smallFooter.innerText = `Last update ${moment(elm.createdAt, 'YYYYMMDD').fromNow()}`
+		statistics.innerText = `Nível da Estatística: +${elm.statistics}`;
+
+		cardBody.appendChild(cardTitle);
+		cardBody.appendChild(statistics);
+		cardBody.appendChild(smallText);
+		cardFooter.appendChild(smallFooter);
+		card.appendChild(icon);
+		card.appendChild(cardBody);
+		card.appendChild(cardFooter);
+		col.appendChild(card);
+		row.appendChild(col);
+	});
+
+	main.innerHTML = '';
+	control.appendChild(row);
+	return main.appendChild(control);
+}
+
+//-------------------------------------------------------------
+
 export function funEditionPost(edition, socket) {
 	edition.addEventListener('click', e => createEditPanel(e, socket));
-	document.querySelector('#system-delete').addEventListener('click', e => {
-		e.preventDefault();
-		createEditPanel(e, socket);
-	});
+	document.querySelector('#system-statistics').addEventListener('click', e => createStatisticsPanel(e, socket));
+	document.querySelector('#system-delete').addEventListener('click', e => createEditPanel(e, socket));
 };

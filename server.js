@@ -14,9 +14,10 @@ const Article = require('./src/models/Article');
 mongoose.connect(process.env.CONNECTSTRING, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false }).then(() => {
+    useFindAndModify: false })
+.then(() => {
         app.emit('connect')
-    }).catch(e => console.log('Mongoose connect error'));
+}).catch(e => console.log('Mongoose connect error'));
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -63,7 +64,7 @@ app.use(routes);
 io.on('connection', socket => {
     socket.on('hello', () => console.log('Hello'));
     
-    socket.on('req-articles', () => Article.Search().then(e => socket.emit('re-articles', e)));
+    socket.on('req-articles', elm => Article.Search(elm).then(e => socket.emit('re-articles', e)));
     
     socket.on('search', id => Article.SearchById(id).then(e => socket.emit('re-article-by-id', e)));
 
@@ -80,6 +81,11 @@ io.on('connection', socket => {
         if(id) return Article.SearchById(id).then(at => socket.emit('found article', at));
         else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', at));
         return;
+    });
+
+    socket.on('statistics', id => {
+        Article.UpdateSOC(id).then(tOf => {}).
+        catch(e => console.log(e));
     });
 });
 

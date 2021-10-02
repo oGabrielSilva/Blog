@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
+    statistics: { type: Number, default: 1 },
+    
     page: { type: String, required: true },
     author: { type: String, required: true },
     title: { type: String, required: true },
@@ -75,7 +77,8 @@ module.exports = class Article {
         }
     }
 
-    static async Search(limit = 7) {
+    static async Search(limit) {
+        limit = limit ? limit : 7;
         const articles = await PostModel.find().sort({ '_id': -1 }).limit(limit); //Funciona, não mexer...
         if(!articles) return null;
         return articles;
@@ -114,6 +117,20 @@ module.exports = class Article {
         } catch(e) {
             console.log(e);
             return null;
+        }
+    }
+
+    static async UpdateSOC(id) {
+        try {
+            if(id) {
+                const statistics = await PostModel.findById(id);
+                const update = statistics.statistics + 1;
+                const article = await PostModel.findByIdAndUpdate(id, { "statistics": update });
+                return article ? true : null;
+            };
+        } catch (e) {
+            console.log('Error', e);
+            return;
         }
     }
 };
