@@ -4,6 +4,7 @@ const home = require('../controllers/home');
 const staff = require('../controllers/staff');
 const article = require('../controllers/article');
 const post = require('../controllers/post');
+const email = require('../controllers/email');
 
 const { loginRequired } = require('../middleware/');
 
@@ -24,5 +25,9 @@ route.post('/system.article.edition', loginRequired, article.renderEdition);
 
 //Rota do Post
 route.get('/post=:id', post.index);
+
+//Rota de emails
+route.get('/email', loginRequired, email.index);
+route.post('/postmail', loginRequired, email.send);
 
 module.exports = route;

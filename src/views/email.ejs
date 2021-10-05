@@ -1,0 +1,42 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<%- include('includes/message') %>
+
+	<main id="system-email-render" class="container">
+		<section id="form-email-render" style="min-height: 100vh;" class="card">
+			<div id="hidden">
+				<input type="hidden" name="_name" value="<%= user.name %>">
+				<input type="hidden" name="_id" value="<%= user._id %>">
+				<input type="hidden" name="_img" value="<%= user.img %>">
+				<input type="hidden" name="_twitter" value="<%= user.twitter %>">
+				<input type="hidden" name="_github" value="<%= user.github %>">
+			</div>
+			<div class="card-header">
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label class="mt-4 mb-1" for="to">Para:</label>
+						<input name="to" id="to" type="text" class="form-control" required="" placeholder="exemplo@empresa.xyz">
+					</div>
+					<div class="col-md-6 form-group">
+						<label class="mt-4 mb-1" for="subject">Assunto principal:</label>
+						<input class="form-control" name="subject" type="text" required="" placeholder="Assunto" id="subject">
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<div class="form-floating">
+						<textarea class="form-control" name="html" required="" style="height: 400px;" placeholder="Comment" id="html-text"></textarea>
+						<label for="html-text">Escreva o conteúdo aqui</label>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary mb-3 ms-3" style="max-width: 130px;">Enviar E-mail</button>
+			<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+		</section>
+	</main>
+
+	<%- include('includes/footer') %>
+</body>
+</html>

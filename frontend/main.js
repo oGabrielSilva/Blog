@@ -2,6 +2,7 @@ import funReadMore from './modules/post';
 import funHomeHeader from './modules/homeHeader';
 import funStaff, { funEditionPost } from './modules/staff';
 import funRenderArticle from './modules/renderArticle';
+import { funRenderEmail } from './modules/email';
 
 const socket = io();
 
@@ -9,6 +10,11 @@ const homeHeader = document.querySelector('#home-header');
 const form = document.querySelector('form');
 const post = document.querySelector('#_id');
 const edition = document.querySelector('#system-edition');
+const email = document.querySelector('#system-email-render')
+
+if(post && post.value === window.location.pathname.split('=')[1]) funReadMore(socket);
+if(edition) funEditionPost(edition, socket);
+if(email) funRenderEmail();
 
 if(homeHeader) { 
 	socket.emit('req-articles');
@@ -22,8 +28,8 @@ if(homeHeader) {
 		funHomeHeader(elmts, homeHeader);
 	});
 };
-
-if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
-else if(form && form.getAttribute('id') === 'render-article') funRenderArticle();
-if(post && post.value === window.location.pathname.split('=')[1]) funReadMore(socket);
-if(edition) funEditionPost(edition, socket);
+if(form && !(form.getAttribute('id') === 'render-article')) {
+	funStaff();
+} else if(form && form.getAttribute('id') === 'render-article') {
+	funRenderArticle();
+}
