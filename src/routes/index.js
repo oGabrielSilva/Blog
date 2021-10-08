@@ -25,9 +25,12 @@ route.post('/system.article.edition', loginRequired, article.renderEdition);
 
 //Rota do Post
 route.get('/post=:id', post.index);
+//Rota dos Posts
+route.get('/posts', post.posts);
 
 //Rota de emails
 route.get('/email', loginRequired, email.index);
 route.post('/postmail', loginRequired, email.send);
+route.post('/email/register', email.register);
 
 module.exports = route;

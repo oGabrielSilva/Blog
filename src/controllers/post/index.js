@@ -19,3 +19,5 @@ exports.index = async (req, res) => {
 		return res.redirect('/');
 	}
 };
+
+exports.posts = (req, res) => res.render('posts-category');
