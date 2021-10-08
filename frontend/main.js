@@ -17,7 +17,7 @@ const postsCategory = document.querySelector('#posts-category')
 if(post && post.value === window.location.pathname.split('=')[1]) funReadMore(socket);
 if(edition) funEditionPost(edition, socket);
 if(email) funRenderEmail();
-if(postsCategory) funRenderPosts();
+if(postsCategory) funRenderPosts(socket);
 
 if(homeHeader) { 
 	socket.emit('req-articles');

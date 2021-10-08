@@ -120,6 +120,16 @@ module.exports = class Article {
         }
     }
 
+    static async SearchByCategory(category) {
+        try {
+            const articles = await PostModel.find({ "markdown": category }).limit(25);
+            return articles;
+        } catch(e) {
+            console.log(e);
+            return null;
+        }
+    }
+
     static async UpdateSOC(id) {
         try {
             if(id) {

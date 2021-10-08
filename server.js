@@ -83,6 +83,13 @@ io.on('connection', socket => {
         return;
     });
 
+    socket.on('search by category', category => {
+        console.log(category);
+        Article.SearchByCategory(category).then(posts => socket.emit('post find by category', posts)).catch(err => { 
+            console.log(err);
+        });
+    });
+
     socket.on('statistics', id => {
         Article.UpdateSOC(id).then(tOf => {}).
         catch(e => console.log(e));

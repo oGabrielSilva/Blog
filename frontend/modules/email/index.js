@@ -28,15 +28,15 @@ function eventD({ csurf, values, event }) {
 		const header = `<span style="display:block;
 	    	padding: 1rem 0 1rem 0;
 	    	width: 100%;
-	    	color: #fff;
+	    	color: #000;
 	    	text-align: center;">
 			<h1>GI - Geek Infinity</h1>
 		</span>`
-		const footer = `<span style="width:100%;color:#fff;">
+		const footer = `<span style="width:100%;color:#000;">
 			<div style="text-align: center;
 		    padding: 1rem;">
 		    	<p>Escrito por:</p>
-				<img style="height:60px;border-radius:100%;border:3px solid #fff;" 
+				<img style="height:60px;border-radius:100%;border:3px solid #000;" 
 				src="${form.querySelector('input[name="_img"]').value}">
 				<p>${form.querySelector('input[name="_name"]').value}</p>
 				<p>CEO | Desenvolvedor | Server-side | Client-side | GI</p>
@@ -57,10 +57,10 @@ function eventD({ csurf, values, event }) {
 		</span>`
 		html.innerText = `
 		<span>
-			<div style="background:linear-gradient(#0d1319, #08092d);color:#fff;min-height:100vh;border-radius: 1rem;">
+			<div style="background:#f8f9fa;color:#000;min-height:100vh;border-radius: 1rem;">
 				${header}
 				<div style="padding:.5rem;">
-					<div style="border-radius:.5rem;text-align:center;padding:1rem;color:#fff;">
+					<div style="border-radius:.5rem;text-align:center;padding:1rem;color:#000;">
 						${event.querySelector('#html-text').value}
 					</div>
 				</div>
