@@ -31,6 +31,5 @@ route.get('/posts', post.posts);
 //Rota de emails
 route.get('/email', loginRequired, email.index);
 route.post('/postmail', loginRequired, email.send);
-route.post('/email/register', email.register);
 
 module.exports = route;

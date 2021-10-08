@@ -34,5 +34,3 @@ exports.send = (req, res) => {
 		console.log(e);
 	};
 };
-
-exports.register = (req, res) => res.json({ hello: 'world' });
