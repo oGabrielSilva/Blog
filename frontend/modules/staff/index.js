@@ -45,7 +45,7 @@ function createButtonConfirm(id) {
 	return div;
 }
 
-function funDel(e, id, socket) {
+function funDel(e, id, { socket, userID }) {
 	e.preventDefault();
 	document.body.appendChild(createButtonConfirm(id));
 	document.body.querySelector('#div-delete-a-post').addEventListener('click', event => {
@@ -54,12 +54,14 @@ function funDel(e, id, socket) {
 		const btnDanger = document.body.querySelector('.b-danger-1');
 		const { target } = event;
 		if(target === btnConfirm) {
-			socket.on('post deleted', () => {
+			socket.on('post deleted', id => {
+				const aux = id.userID;
+				if(aux !== userID) return console.log('Socket error');
 				console.log('Post deletado:', id);
 				e.target.parentElement.parentElement.parentElement.parentElement.remove();
 				return father.remove();
 			});
-			return socket.emit('delete a post', id);
+			return socket.emit('delete a post', { id, userID });
 		}
 		else if(target === btnDanger || target === father) return father.remove();
 		else return;
@@ -95,7 +97,7 @@ export default function funStaff() {
 };
 
 //---------------------------------------------------------------
-function funEditPanelHtml(socket) {
+function funEditPanelHtml({ userID, socket }) {
 	const editPanelHtml = Html.Node('section', [{attr: 'class', val: 'mb-5'}]);
 	const form = Html.Node('form', [{attr: 'id', val: 'form-edit-panel'}, {attr: 'class', val: 'mb-3'}]);
 	const row = Html.Node('div', [{attr: 'class', val: 'row'}])
@@ -136,16 +138,21 @@ function funEditPanelHtml(socket) {
 	editPanelHtml.appendChild(goBack);
 	editPanelHtml.appendChild(p);
 	editPanelHtml.appendChild(form);
-	form.addEventListener('submit', event => searchPostByIdOrTitle({ event, form }, socket));
-	socket.on('error', () => {
+	form.addEventListener('submit', event => searchPostByIdOrTitle({ event, form }, { socket, userID }));
+	socket.on('error', id => {
+		if(id !== userID) return console.log('Socket error')
 		titleForm.style.borderColor = '#f00';
 		idForm.style.borderColor = '#f00';
 	}); 
-	socket.on('found article', articles => setArticlesFounded({ articles }, socket));
+	socket.on('found article', art => {
+		if(art.user !== userID) return console.log('Socket error');
+		const articles = art.at;
+		setArticlesFounded({ articles }, { socket, userID });
+	});
 	return editPanelHtml;
 }
 
-function setArticlesFounded({ articles }, socket) {
+function setArticlesFounded({ articles }, { socket, userID }) {
 	const section = document.querySelector('section');
 	section.innerHTML = '';
 	const panelHtml = Html.Node('div');
@@ -156,20 +163,20 @@ function setArticlesFounded({ articles }, socket) {
 	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3'}]);
 	p.innerText = `Posts encontrados: ${articles.length}`;
 	const vetor = [];
-	createArticleDoc({ elms: articles, articles: vetor, editPanelHtml, p, panelHtml }, socket);
+	createArticleDoc({ elms: articles, articles: vetor, editPanelHtml, p, panelHtml }, { socket, userID });
 }
 
-function searchPostByIdOrTitle({ event, form }, socket) {
+function searchPostByIdOrTitle({ event, form }, { socket, userID }) {
 	event.preventDefault();
 	const titleForm = form.querySelector('#title');
 	const idForm = form.querySelector('#id');
 	if(!idForm.value && !titleForm.value) return titleForm.focus();
 	const title = titleForm.value ? String(titleForm.value) : null;
 	const id = idForm.value ? String(idForm.value) : null;
-	return socket.emit('search post by id or title', { id, title });
+	return socket.emit('search post by id or title', { id, title, userID });
 }
 
-function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, socket) {
+function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, { socket, userID }) {
 	const div = val => Html.Node('div', [{attr: 'class', val}]);
 	const img = val => Html.Node('img', [{attr: 'src', val}, {attr: 'class', val: 'card-img-top'}]);
 	const h5 = () => Html.Node('h5', [{attr: 'class', val: 'card-title'}]);
@@ -196,7 +203,7 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, s
 	del.innerText = 'Deletar';
 	del.setAttribute('class', 'btn btn-danger m-1');
 	del.setAttribute('target', '_self');
-	del.addEventListener('click', e => funDel(e, _id, socket));
+	del.addEventListener('click', e => funDel(e, _id, { socket, userID }));
 	accessDiv.appendChild(access);
 	accessDiv.appendChild(edition);
 	accessDiv.appendChild(del);
@@ -225,26 +232,28 @@ function funEditPanelCardHtml({ title, primary, description, _id, createdAt }, s
 	return editPanelCardHtml;
 }
 
-function returnPanel(socket, main) {
-	const panelHtml = funEditPanelHtml(socket);
+function returnPanel({ socket, userID }, main) {
+	const panelHtml = funEditPanelHtml({ socket, userID });
 	const editPanelHtml = Html.Node('div', [{attr: 'class', val: 'row row-cols-1 row-cols-md-3 g-4'}]);
 	const p = Html.Node('p', [{attr: 'class', val: 'h4 mb-3'}]);
 	p.innerText = 'Veja os últimos posts:';
 	const articles = [];
-	socket.emit('req-articles');
-	socket.on('re-articles', elms => {
-		createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, socket);
+	socket.emit('req-articles', { num: 10, userID });
+	socket.on('re-articles', elmts => {
+		if(userID !== elmts.userID) return console.log('Socket error');
+		const elms = elmts.e;
+		createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, { socket, userID });
 		return main.classList.toggle('d-none');
 	});
 }
 
-function createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, socket) {
+function createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, { socket, userID }) {
 	elms.forEach(elm => {
 		const { title, description, primary, createdAt, _id  } = elm;
 		articles.push({ title, description, primary, _id, createdAt });
 	});
 	articles.forEach(val => {
-		const reEditPanelCardHtml = funEditPanelCardHtml(val, socket);
+		const reEditPanelCardHtml = funEditPanelCardHtml(val, { socket, userID });
 		editPanelHtml.appendChild(reEditPanelCardHtml);
 	});
 
@@ -253,27 +262,30 @@ function createArticleDoc({ elms, articles, editPanelHtml, p, panelHtml }, socke
 	document.querySelector('section').appendChild(editPanelHtml);
 }
 
-function createEditPanel(e, socket) {
+function createEditPanel(e, { socket, userID }) {
 	e.preventDefault();
 	const main = document.querySelector('main');
 	e.target.classList.add('disabled');
 	e.target.innerText = 'Carregando';
-	return returnPanel(socket, main);
+	return returnPanel({ socket, userID }, main);
 }
 
 //-------------------------------------------------------------
 
-function createStatisticsPanel(e, socket) {
+function createStatisticsPanel(e, { socket, userID }) {
 	e.preventDefault();
 	const main = document.querySelector('main');
 	e.target.classList.add('disabled');
 	e.target.innerText = 'Carregando';
-	return returnPanelStatistics(socket, main);
+	return returnPanelStatistics({ socket, userID }, main);
 }
 
-function returnPanelStatistics(socket, main) {
-	socket.emit('req-articles', 10);
-	socket.on('re-articles', arts => createTableStatistics({ arts, main }));
+function returnPanelStatistics({ socket, userID }, main) {
+	socket.emit('req-articles', { num: 10, userID });
+	socket.on('re-articles', arts => {
+		if(arts.userID !== userID) return console.log('Socket error'); 
+		createTableStatistics({ arts: arts.e, main });
+	});
 }
 
 function createTableStatistics({ main, arts }) {
@@ -326,8 +338,8 @@ function createTableStatistics({ main, arts }) {
 
 //-------------------------------------------------------------
 
-export function funEditionPost(edition, socket) {
-	edition.addEventListener('click', e => createEditPanel(e, socket));
-	document.querySelector('#system-statistics').addEventListener('click', e => createStatisticsPanel(e, socket));
-	document.querySelector('#system-delete').addEventListener('click', e => createEditPanel(e, socket));
+export function funEditionPost(edition, { socket, userID }) {
+	edition.addEventListener('click', e => createEditPanel(e, { socket, userID }));
+	document.querySelector('#system-statistics').addEventListener('click', e => createStatisticsPanel(e, { socket, userID }));
+	document.querySelector('#system-delete').addEventListener('click', e => createEditPanel(e, { socket, userID }));
 };

@@ -62,36 +62,51 @@ app.use(checkCsrfError);
 app.use(routes);
 
 io.on('connection', socket => {
-    socket.on('hello', () => console.log('Hello'));
-    
-    socket.on('req-articles', elm => Article.Search(elm).then(e => socket.emit('re-articles', e)));
-    
-    socket.on('search', id => Article.SearchById(id).then(e => socket.emit('re-article-by-id', e)));
+    socket.on('find all posts', id => {
+        Article.FindAllPosts().then(posts => {
+            const span = { id, posts }
+            socket.emit('return all posts', span);
+        }).catch(e => console.log(e));
+    });
 
-    socket.on('delete a post', id => {
+    socket.on('req-articles', elm => {
+        if(!elm.userID) return console.log('Socket error: req-articles');
+        Article.Search(elm.num).then(e => socket.emit('re-articles', { e, userID: elm.userID }));
+    });
+    
+    socket.on('search', ({ id, userID }) => {
+        if(!userID) return console.log('Socket error: search');
+        Article.SearchById(id).then(e => socket.emit('re-article-by-id', { e, userID }));
+    });
+
+    socket.on('delete a post', ({ id, userID }) => {
+        if(!userID) return console.log('Socket error: delete a post');
         Article.SearchByIdAndDelete(id)
-        .then(article => socket.emit('post deleted', article))
+        .then(article => socket.emit('post deleted', { article, userID }))
         .catch(e => console.log('Erro ao buscar artigo para deletar.', e));
     });
 
     socket.on('search post by id or title', value => {
+        if(!value.userID) return console.log('Socket error: search post by id or title');
+        const user = value.userID;
         const id = value.id !== null && value.id.length === 24 ? value.id : null;
         const title = value.title !== null && value.title.length < 71 ? value.title : null;
-        if(id === null && title === null) return socket.emit('error');
-        if(id) return Article.SearchById(id).then(at => socket.emit('found article', at));
-        else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', at));
+        if(id === null && title === null) return socket.emit('error', user);
+        if(id) return Article.SearchById(id).then(at => socket.emit('found article', { at, user }));
+        else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', { at, user }));
         return;
     });
 
-    socket.on('search by category', category => {
-        console.log(category);
-        Article.SearchByCategory(category).then(posts => socket.emit('post find by category', posts)).catch(err => { 
+    socket.on('search by category', ({ key, userID }) => {
+        if(!userID) return console.log('Socket error: search by category');
+        Article.SearchByCategory(key).then(posts => socket.emit('post find by category', { posts, id: userID })).catch(err => { 
             console.log(err);
         });
     });
 
-    socket.on('statistics', id => {
-        Article.UpdateSOC(id).then(tOf => {}).
+    socket.on('statistics', ({ pathname, userID }) => {
+        if(!userID) return console.log('Socket error: statistics');
+        Article.UpdateSOC(pathname).then(tOf => {}).
         catch(e => console.log(e));
     });
 });

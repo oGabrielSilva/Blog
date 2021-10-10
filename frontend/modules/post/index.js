@@ -65,9 +65,13 @@ function setReadMore(obj, pathname) {
 	});
 }
 
-export default function funReadMore(socket) {
+export default function funReadMore({ socket, userID }) {
 	const pathname = window.location.pathname.split('=')[1];
-	socket.emit('statistics', pathname);
-	socket.emit('search', pathname);
-	socket.on('re-article-by-id', obj => setReadMore(obj, pathname));
+	socket.emit('statistics', { pathname, userID });
+	socket.emit('search', { id: pathname, userID });
+	socket.on('re-article-by-id', obj => {
+		if(userID !== obj.userID) return console.log('Socket error');
+		const { e } = obj;
+		setReadMore(e, pathname)
+	});
 };
