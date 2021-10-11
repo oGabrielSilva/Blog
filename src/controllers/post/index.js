@@ -1,9 +1,11 @@
 const Article = require('../../models/Article');
+const Login = require('../../models/Login');
 
 exports.index = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const article = await Article.SearchById(id);
+		const user = await Login.SearchByName(article.author);
 		if(!article) {
 			req.flash('errors', ['Aconteceu algo de errado? Nos contate. :3']);
 			req.session.save(function() {
@@ -11,7 +13,7 @@ exports.index = async (req, res) => {
 			});
 			return;
 		}
-		res.render('post', { article });
+		res.render('post', { article, user });
 		return;
 	} catch (e) {
 		console.log(e);

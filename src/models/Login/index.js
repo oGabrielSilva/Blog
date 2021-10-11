@@ -77,4 +77,10 @@ module.exports = class Login {
             password: this.body.password
         };
     };
+
+    static async SearchByName(name) {
+        const user = await LoginModel.find({ "name": name }).limit(1);
+        const { email, twitter, github, img } = user[0];
+        return { email, img, github, twitter };
+    }
 };

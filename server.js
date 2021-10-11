@@ -31,7 +31,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "i.pinimg.com/"],
+        "img-src": ["'self'", "i.pinimg.com/", "avatars.githubusercontent.com/"],
       },
     },
   })

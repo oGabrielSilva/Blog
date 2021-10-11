@@ -1,3 +1,35 @@
+<% if(locals.user) { %>
+<section class="p-2">
+	<div>
+		<img src="<%= locals.user.img %>" id="img-user-github" class="mx-auto d-block">
+	</div>
+	<div>
+		<div class="text-center">
+			<span>
+				<a class="link-dark text-decoration-none m-2" target="_blank" href="mailto:<%= user.email %>">
+					<i class="bi bi-envelope"></i>
+				</a>
+			</span>
+			<span>
+				<a class="link-dark text-decoration-none m-2" target="_blank" href="<%= user.twitter %>">
+					<i class="bi bi-twitter"></i>
+				</a>
+			</span>
+			<span>
+				<a class="link-dark text-decoration-none m-2" target="_blank" href="<%= user.github %>">
+					<i class="bi bi-github"></i>
+				</a>
+			</span>
+			<span>
+				<a class="link-dark text-decoration-none m-2" target="_blank" href="<%= user.linkedin %>">
+					<i class="bi bi-linkedin"></i>
+				</a>
+			</span>
+		</div>
+	</div>
+</section>
+<% } %>
+
 <section>
 	<form method="POST" class="d-flex mb-3">
 		<input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">

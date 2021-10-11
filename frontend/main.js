@@ -4,6 +4,7 @@ import funRenderArticle from './modules/renderArticle';
 import funRenderPosts, { funRenderAllPosts } from './modules/renderPosts';
 import funReadMore from './modules/post';
 import { funRenderEmail } from './modules/email';
+import funChooseQuote from './modules/quote';
 
 const socket = io();
 const userID = generateID();
@@ -14,7 +15,7 @@ const post = document.querySelector('#_id');
 const edition = document.querySelector('#system-edition');
 const email = document.querySelector('#system-email-render');
 const postsCategory = document.querySelector('#posts-category');
-const footer = document.querySelector('#footer');
+const blockquoteFooter = document.querySelector('#blockquote-footer');
 
 if(post && post.value === window.location.pathname.split('=')[1]) funReadMore({ userID, socket });
 if(edition) funEditionPost(edition, { socket, userID });
@@ -34,11 +35,20 @@ if(homeHeader) {
 		funHomeHeader(elmts, homeHeader);
 	});
 };
-if(form && !(form.getAttribute('id') === 'render-article')) {
-	funStaff();
-} else if(form && form.getAttribute('id') === 'render-article') {
-	funRenderArticle();
+if(blockquoteFooter) {
+	const firstQuote = funChooseQuote();
+	blockquoteFooter.querySelector('#quote-msg').innerText = firstQuote.quote;
+	blockquoteFooter.querySelector('cite').innerText = firstQuote.author;
+	const blockquoteIndex = document.querySelector('#blockquote-index');
+	if(blockquoteIndex) {
+		const secondQuote = funChooseQuote();
+		blockquoteIndex.querySelector('#quote-msg-index').innerText = secondQuote.quote;
+		blockquoteIndex.querySelector('cite').innerText = secondQuote.author;
+	}
 }
+
+if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
+else if(form && form.getAttribute('id') === 'render-article') funRenderArticle();
 
 function generateID() {
 	const id = '_' + Math.random().toString(36).substr(2, 9) + Math.random().toFixed(5);
