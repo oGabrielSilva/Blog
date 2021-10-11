@@ -5,7 +5,7 @@ const LoginSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     address: { type: String, required: true },
-    city: { type: String, required: true },
+    linkedin: { type: String, required: true },
     img: { type: String, required: true },
     twitter: { type: String, required: true },
     github: { type: String, required: true },
@@ -70,7 +70,7 @@ module.exports = class Login {
             name: this.body.name,
             email: this.body.email,
             address: this.body.address,
-            city: this.body.city,
+            linkedin: this.body.linkedin,
             img: this.body.img,
             twitter: this.body.twitter,
             github: this.body.github,
@@ -80,7 +80,7 @@ module.exports = class Login {
 
     static async SearchByName(name) {
         const user = await LoginModel.find({ "name": name }).limit(1);
-        const { email, twitter, github, img } = user[0];
-        return { email, img, github, twitter };
+        const { email, twitter, github, img, linkedin } = user[0];
+        return { email, img, github, twitter, linkedin };
     }
 };

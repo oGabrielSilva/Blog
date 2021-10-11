@@ -19,9 +19,9 @@
 				<label for="system-user-name">Endereço</label>
 			</div>
 			<div class="form-floating mb-2 mx-auto">
-				<input type="text" class="form-control" required maxlength="25"
-				id="system-new-user-city" name="city" placeholder="Cidade">
-				<label for="system-new-user-city">Cidade</label>
+				<input type="password" class="form-control" required 
+				id="system-new-user-password" name="password" placeholder="Senha">
+				<label for="system-new-user-password">Senha</label>
 			</div>
 		</div>
 		<div class="col-sm-6">
@@ -41,9 +41,9 @@
 				<label for="system-new-user-github">GitHub</label>
 			</div>
 			<div class="form-floating mb-2 mx-auto">
-				<input type="password" class="form-control" required 
-				id="system-new-user-password" name="password" placeholder="Senha">
-				<label for="system-new-user-password">Senha</label>
+				<input type="text" class="form-control" required  
+				id="system-new-user-linkedin" name="linkedin" placeholder="LinkedIn">
+				<label for="system-new-user-linkedin">LinkedIn</label>
 			</div>
 		</div>
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">

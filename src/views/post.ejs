@@ -7,19 +7,21 @@
 			<%= locals.article.description %>
 		</p>
 		<p class="text-end pe-none">Escrito por: <span id="author" class="text-decoration-underline fw-light"><%= locals.article.author %></span></p>
-		<p class="text-end pe-none">&raquo; <span id="markdown" class="fw-light text-decoration-underline">
-			<% if(locals.article.markdown === 'dia-a-dia') { %>
+		<p class="text-end pe-none">&raquo; 
+			<span id="markdown" class="fw-light text-decoration-underline">
+				<% if(locals.article.markdown === 'dia-a-dia') { %>
 				<%= 'Dia a dia' %>
-			<% } else if (locals.article.markdown === 'mundo-geek') { %>
+				<% } else if (locals.article.markdown === 'mundo-geek') { %>
 				<%= 'Mundo Geek' %>
-			<% } else if(locals.article.markdown === 'artigo-infinity') { %>
+				<% } else if(locals.article.markdown === 'artigo-infinity') { %>
 				<%= 'Artigo Infinity' %>
-			<% } else if (locals.article.markdown === 'desenvolvimento') { %>
+				<% } else if (locals.article.markdown === 'desenvolvimento') { %>
 				<%= 'Desenvolvimento' %>
-			<% } else { %>
+				<% } else { %>
 				<%= '' %>
-			<% } %>
-		</span></p>
+				<% } %>
+			</span>
+		</p>
 	</section>
 	<div class="container">
 		<div class="row">

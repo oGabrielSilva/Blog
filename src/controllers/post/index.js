@@ -13,7 +13,8 @@ exports.index = async (req, res) => {
 			});
 			return;
 		}
-		res.render('post', { article, user });
+		const share = true;
+		res.render('post', { article, user, share });
 		return;
 	} catch (e) {
 		console.log(e);

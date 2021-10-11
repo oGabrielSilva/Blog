@@ -16,6 +16,7 @@ const edition = document.querySelector('#system-edition');
 const email = document.querySelector('#system-email-render');
 const postsCategory = document.querySelector('#posts-category');
 const blockquoteFooter = document.querySelector('#blockquote-footer');
+const share = document.querySelector('#share-button');
 
 if(post && post.value === window.location.pathname.split('=')[1]) funReadMore({ userID, socket });
 if(edition) funEditionPost(edition, { socket, userID });
@@ -45,6 +46,12 @@ if(blockquoteFooter) {
 		blockquoteIndex.querySelector('#quote-msg-index').innerText = secondQuote.quote;
 		blockquoteIndex.querySelector('cite').innerText = secondQuote.author;
 	}
+}
+if(share) {
+	share.addEventListener('click', e => {
+		const text = `${document.querySelector('#title').innerText}.\nAcesse: ${window.location.href}`;
+		navigator.clipboard.writeText(text).then(() => alert('Mensagem enviada ao clipboard.')).catch(e => console.log(e));
+	});
 }
 
 if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
