@@ -8,7 +8,6 @@ import funChooseQuote from './modules/quote';
 
 const socket = io();
 const userID = generateID();
-
 const homeHeader = document.querySelector('#home-header');
 const form = document.querySelector('form');
 const post = document.querySelector('#_id');
@@ -56,6 +55,12 @@ if(share) {
 
 if(form && !(form.getAttribute('id') === 'render-article')) funStaff();
 else if(form && form.getAttribute('id') === 'render-article') funRenderArticle();
+
+socket.emit('require version', userID);
+socket.on('require version completed', ({ id, version }) => {
+	if(userID !== id && !version) return console.log('Socket error');
+	document.querySelector('#currently').innerText = `Currently v${version}.`;
+});
 
 function generateID() {
 	const id = '_' + Math.random().toString(36).substr(2, 9) + Math.random().toFixed(5);

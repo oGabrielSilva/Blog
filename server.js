@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const server = require('http').createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const { version } = require('./package.json');
 const Article = require('./src/models/Article');
 
 mongoose.connect(process.env.CONNECTSTRING, { 
@@ -108,6 +109,11 @@ io.on('connection', socket => {
         if(!userID) return console.log('Socket error: statistics');
         Article.UpdateSOC(pathname).then(tOf => {}).
         catch(e => console.log(e));
+    });
+
+    socket.on('require version', id => {
+        if(!id) return console.log('Socket error');
+        socket.emit('require version completed', { id, version });
     });
 });
 
