@@ -36,8 +36,8 @@
 <% } %>
 
 <section>
-	<form method="POST" class="d-flex mb-3">
-		<input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+	<form method="POST" class="d-flex mb-3" action="/search">
+		<input class="form-control me-2" type="search" placeholder="Buscar" name="date" aria-label="Search">
 		<button class="btn btn-outline-success" type="submit">Buscar</button>
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 	</form>

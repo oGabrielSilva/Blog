@@ -27,6 +27,7 @@ route.post('/system.article.edition', loginRequired, article.renderEdition);
 route.get('/post=:id', post.index);
 //Rota dos Posts
 route.get('/posts=:id', post.posts);
+route.post('/search', post.search);
 
 //Rota de emails
 route.get('/email', loginRequired, email.index);

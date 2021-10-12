@@ -1,0 +1,27 @@
+<%- include('includes/head') %>
+<body>
+	<%- include('includes/header') %>
+	<section class="container" style="min-height: 100vh">
+		<main class="card-group row text-center">
+			<% if(!locals.posts || locals.posts.length < 1) { %>
+				<a class="nav-link" href="/">Voltar</a>
+				<h1>Não foram encontrados posts.</h1>
+			<% } else { %>
+				<% for(let post of locals.posts) { %>
+					<div class="col-sm-4 col-card">
+						<div class="card">
+							<img class="card-img-top" src="<%= post.primary %>">
+							<div class="card-body">
+								<h5 class="card-title"><%= post.title %></h5>
+								<p class="card-text"><%= post.description %></p>
+								<a href="/post=<%= post._id %>" class="btn btn-primary mt-2 mb-2">Acessar post</a>
+							</div>
+						</div>
+					</div>
+				<% } %>
+			<% } %>
+		</main>
+	</section>
+	<%- include('includes/footer') %>
+</body>
+</html>

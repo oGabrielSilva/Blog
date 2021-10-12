@@ -24,3 +24,16 @@ exports.index = async (req, res) => {
 };
 
 exports.posts = (req, res) => res.render('posts-category');
+
+exports.search = async (req, res) => {
+	try {
+		const { date } = req.body;
+		if(!date || typeof date !== 'string') return res.redirect('/');
+		const posts = await Article.SearchByRegex(date);
+		return res.render('posts', { posts });
+	} catch(e) {
+		console.log(e);
+		req.flash('errors', ['Infelizmente tivemos algum problema... :(']);
+		return res.redirect('/');
+	}
+};
