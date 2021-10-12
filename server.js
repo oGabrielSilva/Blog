@@ -18,7 +18,7 @@ mongoose.connect(process.env.CONNECTSTRING, {
     useFindAndModify: false })
 .then(() => {
         app.emit('connect')
-}).catch(e => console.log('Mongoose connect error \n\n\n\n\n', e, '\n\n\n'));
+}).catch(e => console.log('Mongoose connect error'));
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
