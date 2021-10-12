@@ -1,16 +1,5 @@
 import Html from '../html';
 
-export function funRenderEmail() {
-	const event = document.querySelector('#form-email-render');
-	const csurf = event.querySelector('input[name="_csrf"]').value;
-	const values = [...event.querySelector('#hidden').querySelectorAll('input')].map(val => {
-		const type = val.getAttribute('name');
-		const value = val.value;
-		return { type, value };
-	});
-	event.querySelector('button').addEventListener('click', () => eventD({ csurf, values, event }));
-};
-
 function eventD({ csurf, values, event }) {
 	const form = Html.Node('form', [{attr: 'method', val: 'POST'}, {attr: 'action', val: '/postmail'}]);
 	values.forEach(value => {
@@ -80,3 +69,68 @@ function eventD({ csurf, values, event }) {
 	document.body.appendChild(container);
 	form.submit();
 }
+
+function eventDF({ e, event, csrf }) {
+	const form = Html.Node('form', [{attr: 'method', val: 'POST'}, {attr: 'action', val: '/postmail.feedback'}]);
+	const name = Html.Node('input', [{attr: 'name', val: 'name'}]);
+	const to = Html.Node('input', [{attr: 'name', val: 'to'}]);
+	const subject = Html.Node('input', [{attr: 'name', val: 'subject'}]);
+	const html = Html.Node('textarea', [{attr: 'name', val: 'html'}]);
+	const csurf = Html.Node('input', [{attr: 'type', val: 'hidden'}, {attr: 'name', val: '_csrf'}, {attr: 'value', val: csrf}]);
+
+	to.setAttribute('value', `${event.querySelector('#to').value}`);
+	name.setAttribute('value', `${event.querySelector('#name').value}`);
+	subject.setAttribute('value', `${event.querySelector('#subject').value}`);
+	html.innerText = `${event.querySelector('#html-text').value}`;
+
+	const test = { to, name, subject, html };
+	for(let item in test) {
+		if (test[item].nodeName === 'INPUT' && test[item].value === '') {
+			e.target.classList.remove('btn-primary');
+			e.target.classList.add('btn-danger');
+			e.target.parentElement.querySelector('#danger').innerText = 'Algum campo está incompleto';
+			return setTimeout(() => {
+				e.target.classList.remove('btn-danger');
+				e.target.classList.add('btn-primary');
+			}, 450);
+		}
+		else if (test[item].nodeName === 'TEXTAREA' && test[item].innerText === '') {
+			e.target.classList.remove('btn-primary');
+			e.target.classList.add('btn-danger');
+			e.target.parentElement.querySelector('#danger').innerText = 'Algum campo está incompleto';
+			return setTimeout(() => {
+				e.target.classList.remove('btn-danger');
+				e.target.classList.add('btn-primary');
+			}, 450);
+		}
+	}
+
+	form.appendChild(to);
+	form.appendChild(name);
+	form.appendChild(subject);
+	form.appendChild(html);
+	form.appendChild(csurf);
+
+	const container = Html.Node('div', [{attr: 'class', val: 'd-none'}]);
+	container.appendChild(form);
+	document.body.appendChild(container);
+	form.submit();
+}
+
+function funRenderFeedback() {
+	const event = document.querySelector('#form-feedback-render');
+	const csrf = event.querySelector('input[name="_csrf"]').value
+	event.querySelector('button').addEventListener('click', e => eventDF({ e, csrf, event }));
+}
+
+export function funRenderEmail() {
+	const event = document.querySelector('#form-email-render');
+	if(!event) return funRenderFeedback()
+	const csurf = event.querySelector('input[name="_csrf"]').value;
+	const values = [...event.querySelector('#hidden').querySelectorAll('input')].map(val => {
+		const type = val.getAttribute('name');
+		const value = val.value;
+		return { type, value };
+	});
+	event.querySelector('button').addEventListener('click', () => eventD({ csurf, values, event }));
+};

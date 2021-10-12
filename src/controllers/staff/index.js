@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
         req.session.user = login.user;
         req.session.save(function() {
             return res.redirect('/system');
-        })
+        });
         return;
     } catch (e) {
         console.log(e);

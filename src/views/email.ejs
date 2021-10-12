@@ -4,6 +4,7 @@
 	<%- include('includes/message') %>
 
 	<main id="system-email-render" class="container">
+		<% if(!locals.feedback) { %>
 		<section id="form-email-render" style="min-height: 100vh;" class="card">
 			<div id="hidden">
 				<input type="hidden" name="_name" value="<%= user.name %>">
@@ -35,6 +36,40 @@
 			<button type="submit" class="btn btn-primary mb-3 ms-3" style="max-width: 130px;">Enviar E-mail</button>
 			<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 		</section>
+		<% } else { %>
+		<section id="form-feedback-render" style="min-height: 100vh;" class="card">
+			<div class="card-header">
+				<div class="form-group">
+					<label class="mt-4 mb-1" for="subject">Assunto principal:</label>
+					<input class="form-control" name="subject" type="text" required="" placeholder="Assunto" id="subject">
+				</div>
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label class="mt-4 mb-1" for="name">Seu nome:</label>
+						<input name="name" id="name" type="text" class="form-control" required="" autocomplete="off" placeholder="Isaac Ódin">
+					</div>
+					<div class="col-md-6 form-group">
+						<label class="mt-4 mb-1" for="to">Seu E-mail:</label>
+						<input name="to" id="to" type="email" class="form-control" required="" autocomplete="off" placeholder="nome@gmail.com">
+					</div>
+				</div>
+				<small class="form-text text-muted">
+					Não usaremos seu e-mail para nada, apenas o pedimos para ter uma forma de entrar em contato caso necessário. A sua mensagem será enviada ao seu e-mail também, apenas.
+				</small>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<div class="form-floating">
+						<textarea class="form-control" name="html" required="" style="height: 400px;" placeholder="Comment" id="html-text"></textarea>
+						<label for="html-text">Escreva o conteúdo aqui</label>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary mb-3 ms-3" style="max-width: 150px;">Enviar feedback</button>
+			<small class="form-text text-danger ms-3" id="danger"></small>
+			<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+		</section>
+		<% } %>
 	</main>
 
 	<%- include('includes/footer') %>

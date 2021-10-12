@@ -5,6 +5,7 @@ const staff = require('../controllers/staff');
 const article = require('../controllers/article');
 const post = require('../controllers/post');
 const email = require('../controllers/email');
+const feedback = require('../controllers/feedback');
 
 const { loginRequired } = require('../middleware/');
 
@@ -32,5 +33,8 @@ route.post('/search', post.search);
 //Rota de emails
 route.get('/email', loginRequired, email.index);
 route.post('/postmail', loginRequired, email.send);
+
+route.get('/feedback', feedback.index);
+route.post('/postmail.feedback', feedback.sender);
 
 module.exports = route;

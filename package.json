@@ -1,6 +1,6 @@
 {
   "name": "projeto_blog",
-  "version": "0.6.4",
+  "version": "1.0.0",
   "description": "Uma aplicação web de postagens com algumas categorias de blogs e banco de dados Mongoose.",
   "keywords": ["blog", "artigos", "postagens"],
   "main": "server.js",
