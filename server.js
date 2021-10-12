@@ -72,12 +72,16 @@ io.on('connection', socket => {
 
     socket.on('req-articles', elm => {
         if(!elm.userID) return console.log('Socket error: req-articles');
-        Article.Search(elm.num).then(e => socket.emit('re-articles', { e, userID: elm.userID }));
+        Article.Search(elm.num).then(e => socket.emit('re-articles', { e, userID: elm.userID })).catch(err => { 
+            console.log(err);
+        });
     });
     
     socket.on('search', ({ id, userID }) => {
         if(!userID) return console.log('Socket error: search');
-        Article.SearchById(id).then(e => socket.emit('re-article-by-id', { e, userID }));
+        Article.SearchById(id).then(e => socket.emit('re-article-by-id', { e, userID })).catch(err => { 
+            console.log(err);
+        });
     });
 
     socket.on('delete a post', ({ id, userID }) => {
@@ -93,8 +97,12 @@ io.on('connection', socket => {
         const id = value.id !== null && value.id.length === 24 ? value.id : null;
         const title = value.title !== null && value.title.length < 71 ? value.title : null;
         if(id === null && title === null) return socket.emit('error', user);
-        if(id) return Article.SearchById(id).then(at => socket.emit('found article', { at, user }));
-        else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', { at, user }));
+        if(id) return Article.SearchById(id).then(at => socket.emit('found article', { at, user })).catch(err => { 
+            console.log(err);
+        });
+        else if(title) return Article.SearchByRegex(title).then(at => socket.emit('found article', { at, user })).catch(err => { 
+            console.log(err);
+        });
         return;
     });
 
